@@ -80,6 +80,7 @@ func main() {
 		go func() {
 			if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 				log.Fatal(err)
+				fmt.Println(err)
 			}
 		}()
 
