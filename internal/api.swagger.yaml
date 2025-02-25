@@ -16,3 +16,61 @@ consumes:
 
 produces:
   - application/json
+
+paths:
+  /auth/register:
+    post:
+      summary: Register User
+      operationId: RegisterUser
+      tags: 
+        - Auth
+      parameters:
+        - name: RegisterUser
+          description: Register User Body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/RegisterUser'
+      responses:
+        200:
+          description: Register Response
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error' 
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: "#/definitions/Error"        
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+
+  RegisterUser:
+    type: object
+    required:
+      - username
+      - tg_id
+    properties:
+      username:
+        type: string
+      tg_id:
+        type: integer
+      
+
+  Error:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string

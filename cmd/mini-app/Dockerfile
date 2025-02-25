@@ -1,5 +1,5 @@
 # build stage
-FROM golang:1.23.2-alpine AS build
+FROM golang:1.23.3-alpine AS build
 
 # Установите Git
 RUN apk add --no-cache git
@@ -19,7 +19,7 @@ FROM alpine
 
 # Копируем собранное приложение
 COPY --from=build /bin/mini-app /bin/mini-app
-COPY --from=build /src/internal/database/postgresql/migrations /migrations
+COPY --from=build /src/database/postgresql/migrations /migrations
 
 # Укажите правильный путь к исполняемому файлу
 ENTRYPOINT ["/bin/mini-app"]

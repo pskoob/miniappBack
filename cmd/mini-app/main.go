@@ -1,11 +1,11 @@
 package main
 
 import (
-	"context"
-	"fmt"
+	// "context"
+	// "fmt"
 	"log"
 	"miniappBack/pkg/logger"
-	"github.com/pskoob/miniappBack/internal/handler"
+	"miniappBack/internal/handler"
 
 	"net/http"
 	"os"
@@ -27,7 +27,7 @@ import (
 
 var (
 	cfg config.Config
-)
+)make generate
 
 func main() {
 	envconfig.MustProcess("", &cfg)

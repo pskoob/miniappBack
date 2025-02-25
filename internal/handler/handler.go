@@ -1,18 +1,17 @@
 package handler
 
 import (
-	"context"
-	"fmt"
+	// "context"
+	// "fmt"
 
 	"net/http"
-	"strings"
+	// "strings"
 
-	"strings"
 
-	"encoding/json"
+	// "encoding/json"
 
 	"go.uber.org/zap"
-	"github.com/go-openapi/loads"
+	// "github.com/go-openapi/loads"
 )
 
 type Handler struct {
@@ -21,11 +20,11 @@ type Handler struct {
 
 func New() *Handler {
 
-	withChangedVersion := strings.ReplaceAll(string(restapi.SwaggerJSON), "development", "1")
-	swagger, err := loads.Analyzed(json.RawMessage(withChangedVersion), "")
-	if err != nil {
-		panic(err)
-	}
+	// withChangedVersion := strings.ReplaceAll(string(restapi.SwaggerJSON), "development", "1")
+	// swagger, err := loads.Analyzed(json.RawMessage(withChangedVersion), "")
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	h := &Handler{}
 
@@ -35,7 +34,7 @@ func New() *Handler {
 	// router.Logger = zap.S().Infof
 	
 
-	h.router = router.Serve(nil)
+	// h.router = router.Serve(nil)
 
 	return h
 }
