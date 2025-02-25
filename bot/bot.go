@@ -1,1 +1,4 @@
 package bot
+
+func New()
+
