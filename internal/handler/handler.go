@@ -30,9 +30,9 @@ func New() *Handler {
 	h := &Handler{}
 
 	zap.L().Error("server http handler request")
-	router := api.NewSpaceVPXBackendServiceAPI(swagger)
-	router.UseSwaggerUI()
-	router.Logger = zap.S().Infof
+	// router := api.NewSpaceVPXBackendServiceAPI(swagger)
+	// router.UseSwaggerUI()
+	// router.Logger = zap.S().Infof
 	
 
 	h.router = router.Serve(nil)

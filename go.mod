@@ -1,6 +1,6 @@
 module miniappBack
 
-go 1.23.3
+go 1.23.2
 
 require (
 	github.com/Masterminds/squirrel v1.5.4

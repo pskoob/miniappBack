@@ -1,10 +1,11 @@
 package main
 
 import (
-	// // "context"
-	// // "fmt"
-	// "log"
+	"context"
+	"fmt"
+	"log"
 	"miniappBack/pkg/logger"
+	"github.com/pskoob/miniappBack/internal/handler"
 
 	"net/http"
 	"os"
@@ -64,17 +65,17 @@ func main() {
 
 	zap.L().Info("Database manage was process successfully")
 
-		// appHandler := handler.New()
+		appHandler := handler.New()
 
-		// chain := alice.New(appHandler.WsMiddleware).Then(appHandler)
-		// if chain == nil {
-		// 	fmt.Println(chain)
-		// }
+		chain := alice.New(appHandler.WsMiddleware).Then(appHandler)
+		if chain == nil {
+			fmt.Println(chain)
+		}
 
-		// server := http.Server{
-		// 	Handler: chain,
-		// 	Addr:    ":" + cfg.Addr,
-		// }
+		server := http.Server{
+			Handler: chain,
+			Addr:    ":" + cfg.Addr,
+		}
 
 		go func() {
 			if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -99,21 +100,5 @@ func main() {
 		}
 		zap.L().Info("Server exiting")
 
-	}
-
-	func registerUser(c *gin.Context) {
-		var user User
-		if err := c.ShouldBindJSON(&user); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		// Здесь можно добавить хеширование пароля перед сохранением
-		if err := db.Create(&user).Error; err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Username already taken"})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"message": "User  registered successfully", "user": user})
 	}
 

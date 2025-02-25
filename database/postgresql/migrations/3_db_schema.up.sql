@@ -6,9 +6,9 @@ CREATE TABLE IF NOT EXISTS users
     name                     VARCHAR(255),
     tg_id                    BIGINT UNIQUE,
     username                 VARCHAR(255),
+    balance                  BIGINT,
     updated_at               TIMESTAMP WITHOUT TIME ZONE,
-    created_at               TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT(now() at TIME zone 'utc'),
-    username2                VARCHAR(255)
+    created_at               TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT(now() at TIME zone 'utc')
 );
 
 COMMIT;
