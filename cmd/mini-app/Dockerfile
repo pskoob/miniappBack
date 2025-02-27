@@ -1,5 +1,5 @@
 # build stage
-FROM golang:1.23.3-alpine AS build
+FROM golang:1.23.2-alpine AS build
 
 # Установите Git
 RUN apk add --no-cache git

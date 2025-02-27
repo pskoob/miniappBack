@@ -1,11 +1,12 @@
 package main
 
 import (
-	// "context"
-	// "fmt"
+	"context"
+	"fmt"
 	"log"
-	"miniappBack/pkg/logger"
-	"miniappBack/internal/handler"
+
+	"github.com/pskoob/miniappBack/internal/api/server/restapi/handler"
+	"github.com/pskoob/miniappBack/pkg/logger"
 
 	"net/http"
 	"os"
@@ -14,8 +15,8 @@ import (
 
 	"time"
 
-	"miniappBack/config"
-	"miniappBack/database/postgresql"
+	"github.com/pskoob/miniappBack/config"
+	"github.com/pskoob/miniappBack/database/postgresql"
 
 	"github.com/heetch/sqalx"
 	"github.com/jmoiron/sqlx"
@@ -23,11 +24,14 @@ import (
 	"github.com/justinas/alice"
 	"github.com/kelseyhightower/envconfig"
 	"go.uber.org/zap"
+
+	_userRepo "github.com/pskoob/miniappBack/domain/user/repository/postgresql"
+	_userUsecase "github.com/pskoob/miniappBack/domain/user/usecase"
 )
 
 var (
 	cfg config.Config
-)make generate
+)
 
 func main() {
 	envconfig.MustProcess("", &cfg)
@@ -65,41 +69,45 @@ func main() {
 
 	zap.L().Info("Database manage was process successfully")
 
-		appHandler := handler.New()
+	userRepo := _userRepo.New(sqalxConn)
+	userUsecase := _userUsecase.New(userRepo)
 
-		chain := alice.New(appHandler.WsMiddleware).Then(appHandler)
-		if chain == nil {
-			fmt.Println(chain)
-		}
+	appHandler := handler.New(
+		userUsecase,
+	)
 
-		server := http.Server{
-			Handler: chain,
-			Addr:    ":" + cfg.Addr,
-		}
-
-		go func() {
-			if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-				log.Fatal(err)
-				fmt.Println(err)
-			}
-		}()
-
-		quit := make(chan os.Signal, 1)
-		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-
-		// Блокируем `main`, ожидая сигнала
-		<-quit
-		zap.L().Info("Shutdown server ...")
-
-		// Создаем таймаут для выключения сервера
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		defer cancel()
-
-		// Завершение сервера
-		if err := server.Shutdown(ctx); err != nil {
-			log.Fatal("Server shutdown:", err)
-		}
-		zap.L().Info("Server exiting")
-
+	chain := alice.New(appHandler.WsMiddleware).Then(appHandler)
+	if chain == nil {
+		fmt.Println(chain)
 	}
 
+	server := http.Server{
+		Handler: chain,
+		Addr:    ":" + cfg.Addr,
+	}
+
+	go func() {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatal(err)
+			fmt.Println(err)
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+
+	// Блокируем `main`, ожидая сигнала
+	<-quit
+	zap.L().Info("Shutdown server ...")
+
+	// Создаем таймаут для выключения сервера
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Завершение сервера
+	if err := server.Shutdown(ctx); err != nil {
+		log.Fatal("Server shutdown:", err)
+	}
+	zap.L().Info("Server exiting")
+
+}

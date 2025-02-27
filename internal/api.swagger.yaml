@@ -18,22 +18,23 @@ produces:
   - application/json
 
 paths:
-  /auth/register:
+
+  /save_progress:
     post:
-      summary: Register User
-      operationId: RegisterUser
+      summary: Save Progress
+      operationId: SaveProgress
       tags: 
-        - Auth
+        - Progress
       parameters:
-        - name: RegisterUser
-          description: Register User Body
+        - name: Progress
+          description: Save progress body
           in: body
           required: true
           schema:
-            $ref: '#/definitions/RegisterUser'
+            $ref: '#/definitions/Progress'
       responses:
         200:
-          description: Register Response
+          description: Save Progress Response
           schema:
             $ref: '#/definitions/Error'
         400:
@@ -55,17 +56,21 @@ paths:
 
 definitions:
 
-  RegisterUser:
+  Progress:
     type: object
     required:
-      - username
-      - tg_id
+      - coin_number
+      - click_booster
+      - auto_clicker
     properties:
-      username:
-        type: string
       tg_id:
         type: integer
-      
+      coin_number:
+        type: integer
+      click_booster:
+        type: integer
+      auto_clicker:
+        type: boolean
 
   Error:
     type: object
