@@ -23,3 +23,7 @@ func (u *Usecase) CreateUser(ctx context.Context, user model.User) error {
 func (u *Usecase) GetUserByTgID(ctx context.Context, tgID int64) (model.User, error) {
 	return u.userRepository.GetUserByTgID(ctx, tgID)
 }
+
+func (u *Usecase) SaveProgressByTgID(ctx context.Context, autoClicker bool, clickBooster int64, balance int64, tgID int64) error {
+	return u.userRepository.SaveProgressByTgID(ctx, autoClicker, clickBooster, balance, tgID)
+}

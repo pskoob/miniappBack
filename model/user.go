@@ -6,6 +6,10 @@ import (
 	"time"
 )
 
+var (
+	UserDataSaved = "user data was saved"
+)
+
 type User struct {
 	ID int64 `db:"id"`
 
@@ -22,9 +26,11 @@ type User struct {
 type IUserRepository interface {
 	CreateUser(ctx context.Context, user User) error
 	GetUserByTgID(ctx context.Context, tgID int64) (User, error)
+	SaveProgressByTgID(ctx context.Context, autoClicker bool, clickBooster int64, balance int64, tgID int64) error
 }
 
 type IUserUsecase interface {
 	CreateUser(ctx context.Context, user User) error
 	GetUserByTgID(ctx context.Context, tgID int64) (User, error)
+	SaveProgressByTgID(ctx context.Context, autoClicker bool, clickBooster int64, balance int64, tgID int64) error
 }

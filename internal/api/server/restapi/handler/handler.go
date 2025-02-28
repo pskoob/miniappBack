@@ -42,6 +42,10 @@ func New(
 	router.UseSwaggerUI()
 	router.Logger = zap.S().Infof
 
+	// Progress
+	router.GetUserProgressHandler = api.GetUserProgressHandlerFunc(h.GetUserProgressHandler)
+	router.SaveProgressHandler = api.SaveProgressHandlerFunc(h.SaveUserProgressHandler)
+
 	h.router = router.Serve(nil)
 
 	return h

@@ -60,8 +60,8 @@ func (r *UserRepository) GetUserByTgID(ctx context.Context, tgID int64) (model.U
 		"users.updated_at",
 		"users.created_at",
 	).
-		From("cube_sat_projects").
-		Where(sq.Eq{"user.tg_id": tgID}).ToSql()
+		From("users").
+		Where(sq.Eq{"users.tg_id": tgID}).ToSql()
 	if err != nil {
 		return user, err
 	}

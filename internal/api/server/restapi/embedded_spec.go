@@ -31,6 +31,56 @@ func init() {
     "version": "development"
   },
   "paths": {
+    "/get_user_progress/{tg_id}": {
+      "get": {
+        "tags": [
+          "Progress"
+        ],
+        "summary": "Get User Progress",
+        "operationId": "GetUserProgress",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get User Progress Response",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/save_progress": {
       "post": {
         "tags": [
@@ -99,6 +149,7 @@ func init() {
     "Progress": {
       "type": "object",
       "required": [
+        "tg_id",
         "coin_number",
         "click_booster",
         "auto_clicker"
@@ -111,6 +162,32 @@ func init() {
           "type": "integer"
         },
         "coin_number": {
+          "type": "integer"
+        },
+        "tg_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "required": [
+        "tg_id",
+        "coin_number",
+        "click_booster",
+        "auto_clicker"
+      ],
+      "properties": {
+        "auto_clicker": {
+          "type": "boolean"
+        },
+        "click_booster": {
+          "type": "integer"
+        },
+        "coin_number": {
+          "type": "integer"
+        },
+        "tg_id": {
           "type": "integer"
         }
       }
@@ -138,6 +215,56 @@ func init() {
     "version": "development"
   },
   "paths": {
+    "/get_user_progress/{tg_id}": {
+      "get": {
+        "tags": [
+          "Progress"
+        ],
+        "summary": "Get User Progress",
+        "operationId": "GetUserProgress",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get User Progress Response",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/save_progress": {
       "post": {
         "tags": [
@@ -206,6 +333,7 @@ func init() {
     "Progress": {
       "type": "object",
       "required": [
+        "tg_id",
         "coin_number",
         "click_booster",
         "auto_clicker"
@@ -218,6 +346,32 @@ func init() {
           "type": "integer"
         },
         "coin_number": {
+          "type": "integer"
+        },
+        "tg_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "required": [
+        "tg_id",
+        "coin_number",
+        "click_booster",
+        "auto_clicker"
+      ],
+      "properties": {
+        "auto_clicker": {
+          "type": "boolean"
+        },
+        "click_booster": {
+          "type": "integer"
+        },
+        "coin_number": {
+          "type": "integer"
+        },
+        "tg_id": {
           "type": "integer"
         }
       }

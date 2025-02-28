@@ -42,6 +42,9 @@ func NewMaxonBackAPI(spec *loads.Document) *MaxonBackAPI {
 
 		JSONProducer: runtime.JSONProducer(),
 
+		GetUserProgressHandler: GetUserProgressHandlerFunc(func(params GetUserProgressParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetUserProgress has not yet been implemented")
+		}),
 		SaveProgressHandler: SaveProgressHandlerFunc(func(params SaveProgressParams) middleware.Responder {
 			return middleware.NotImplemented("operation SaveProgress has not yet been implemented")
 		}),
@@ -81,6 +84,8 @@ type MaxonBackAPI struct {
 	//   - application/json
 	JSONProducer runtime.Producer
 
+	// GetUserProgressHandler sets the operation handler for the get user progress operation
+	GetUserProgressHandler GetUserProgressHandler
 	// SaveProgressHandler sets the operation handler for the save progress operation
 	SaveProgressHandler SaveProgressHandler
 
@@ -160,6 +165,9 @@ func (o *MaxonBackAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.GetUserProgressHandler == nil {
+		unregistered = append(unregistered, "GetUserProgressHandler")
+	}
 	if o.SaveProgressHandler == nil {
 		unregistered = append(unregistered, "SaveProgressHandler")
 	}
@@ -251,6 +259,10 @@ func (o *MaxonBackAPI) initHandlerCache() {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
 
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/get_user_progress/{tg_id}"] = NewGetUserProgress(o.context, o.GetUserProgressHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}

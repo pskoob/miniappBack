@@ -14,10 +14,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// Progress progress
+// User user
 //
-// swagger:model Progress
-type Progress struct {
+// swagger:model User
+type User struct {
 
 	// auto clicker
 	// Required: true
@@ -36,8 +36,8 @@ type Progress struct {
 	TgID *int64 `json:"tg_id"`
 }
 
-// Validate validates this progress
-func (m *Progress) Validate(formats strfmt.Registry) error {
+// Validate validates this user
+func (m *User) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAutoClicker(formats); err != nil {
@@ -62,7 +62,7 @@ func (m *Progress) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Progress) validateAutoClicker(formats strfmt.Registry) error {
+func (m *User) validateAutoClicker(formats strfmt.Registry) error {
 
 	if err := validate.Required("auto_clicker", "body", m.AutoClicker); err != nil {
 		return err
@@ -71,7 +71,7 @@ func (m *Progress) validateAutoClicker(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Progress) validateClickBooster(formats strfmt.Registry) error {
+func (m *User) validateClickBooster(formats strfmt.Registry) error {
 
 	if err := validate.Required("click_booster", "body", m.ClickBooster); err != nil {
 		return err
@@ -80,7 +80,7 @@ func (m *Progress) validateClickBooster(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Progress) validateCoinNumber(formats strfmt.Registry) error {
+func (m *User) validateCoinNumber(formats strfmt.Registry) error {
 
 	if err := validate.Required("coin_number", "body", m.CoinNumber); err != nil {
 		return err
@@ -89,7 +89,7 @@ func (m *Progress) validateCoinNumber(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Progress) validateTgID(formats strfmt.Registry) error {
+func (m *User) validateTgID(formats strfmt.Registry) error {
 
 	if err := validate.Required("tg_id", "body", m.TgID); err != nil {
 		return err
@@ -98,13 +98,13 @@ func (m *Progress) validateTgID(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this progress based on context it is used
-func (m *Progress) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this user based on context it is used
+func (m *User) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *Progress) MarshalBinary() ([]byte, error) {
+func (m *User) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -112,8 +112,8 @@ func (m *Progress) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *Progress) UnmarshalBinary(b []byte) error {
-	var res Progress
+func (m *User) UnmarshalBinary(b []byte) error {
+	var res User
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

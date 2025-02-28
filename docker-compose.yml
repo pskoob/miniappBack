@@ -7,8 +7,10 @@ services:
     build:
       context: .
       dockerfile: cmd/mini-app/Dockerfile
+    environment:
+      - MIGRATIONS_DIR=/migrations
     ports:
-      - 8205:8000
+      - 8206:8000
     depends_on:
       - postgres
 

@@ -54,11 +54,47 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /get_user_progress/{tg_id}:
+    get:
+      summary: Get User Progress
+      operationId: GetUserProgress
+      tags: 
+        - Progress
+      parameters:
+        - name: tg_id
+          in: path
+          required: true
+          type: integer
+          description: The tg ID of user
+      responses:
+        200:
+          description: Get User Progress Response
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error' 
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: "#/definitions/Error"        
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+      
+
 definitions:
 
   Progress:
     type: object
     required:
+      - tg_id
       - coin_number
       - click_booster
       - auto_clicker
@@ -79,3 +115,20 @@ definitions:
     properties:
       message:
         type: string
+
+  User:
+    type: object
+    required:
+      - tg_id
+      - coin_number
+      - click_booster
+      - auto_clicker
+    properties:
+      tg_id:
+        type: integer
+      coin_number:
+        type: integer
+      click_booster:
+        type: integer
+      auto_clicker:
+        type: boolean

@@ -27,6 +27,8 @@ import (
 
 	_userRepo "github.com/pskoob/miniappBack/domain/user/repository/postgresql"
 	_userUsecase "github.com/pskoob/miniappBack/domain/user/usecase"
+
+	_bot "github.com/pskoob/miniappBack/bot"
 )
 
 var (
@@ -71,6 +73,12 @@ func main() {
 
 	userRepo := _userRepo.New(sqalxConn)
 	userUsecase := _userUsecase.New(userRepo)
+
+	bot, err := _bot.New(userUsecase, cfg.ApiKey)
+	if err != nil {
+		zap.L().Error("error init tg bot", zap.Error(err))
+	}
+	go bot.ListenUpdates()
 
 	appHandler := handler.New(
 		userUsecase,
