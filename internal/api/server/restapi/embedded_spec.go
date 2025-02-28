@@ -150,21 +150,21 @@ func init() {
       "type": "object",
       "required": [
         "tg_id",
-        "coin_number",
-        "click_booster",
-        "auto_clicker"
+        "clickCount",
+        "upgradeLevel",
+        "hasAutoClicker"
       ],
       "properties": {
-        "auto_clicker": {
+        "clickCount": {
+          "type": "integer"
+        },
+        "hasAutoClicker": {
           "type": "boolean"
         },
-        "click_booster": {
-          "type": "integer"
-        },
-        "coin_number": {
-          "type": "integer"
-        },
         "tg_id": {
+          "type": "integer"
+        },
+        "upgradeLevel": {
           "type": "integer"
         }
       }
@@ -173,21 +173,21 @@ func init() {
       "type": "object",
       "required": [
         "tg_id",
-        "coin_number",
-        "click_booster",
-        "auto_clicker"
+        "clickCount",
+        "upgradeLevel",
+        "hasAutoClicker"
       ],
       "properties": {
-        "auto_clicker": {
+        "clickCount": {
+          "type": "integer"
+        },
+        "hasAutoClicker": {
           "type": "boolean"
         },
-        "click_booster": {
-          "type": "integer"
-        },
-        "coin_number": {
-          "type": "integer"
-        },
         "tg_id": {
+          "type": "integer"
+        },
+        "upgradeLevel": {
           "type": "integer"
         }
       }
@@ -334,21 +334,21 @@ func init() {
       "type": "object",
       "required": [
         "tg_id",
-        "coin_number",
-        "click_booster",
-        "auto_clicker"
+        "clickCount",
+        "upgradeLevel",
+        "hasAutoClicker"
       ],
       "properties": {
-        "auto_clicker": {
+        "clickCount": {
+          "type": "integer"
+        },
+        "hasAutoClicker": {
           "type": "boolean"
         },
-        "click_booster": {
-          "type": "integer"
-        },
-        "coin_number": {
-          "type": "integer"
-        },
         "tg_id": {
+          "type": "integer"
+        },
+        "upgradeLevel": {
           "type": "integer"
         }
       }
@@ -357,21 +357,21 @@ func init() {
       "type": "object",
       "required": [
         "tg_id",
-        "coin_number",
-        "click_booster",
-        "auto_clicker"
+        "clickCount",
+        "upgradeLevel",
+        "hasAutoClicker"
       ],
       "properties": {
-        "auto_clicker": {
+        "clickCount": {
+          "type": "integer"
+        },
+        "hasAutoClicker": {
           "type": "boolean"
         },
-        "click_booster": {
-          "type": "integer"
-        },
-        "coin_number": {
-          "type": "integer"
-        },
         "tg_id": {
+          "type": "integer"
+        },
+        "upgradeLevel": {
           "type": "integer"
         }
       }

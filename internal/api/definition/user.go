@@ -19,40 +19,40 @@ import (
 // swagger:model User
 type User struct {
 
-	// auto clicker
+	// click count
 	// Required: true
-	AutoClicker *bool `json:"auto_clicker"`
+	ClickCount *int64 `json:"clickCount"`
 
-	// click booster
+	// has auto clicker
 	// Required: true
-	ClickBooster *int64 `json:"click_booster"`
-
-	// coin number
-	// Required: true
-	CoinNumber *int64 `json:"coin_number"`
+	HasAutoClicker *bool `json:"hasAutoClicker"`
 
 	// tg id
 	// Required: true
 	TgID *int64 `json:"tg_id"`
+
+	// upgrade level
+	// Required: true
+	UpgradeLevel *int64 `json:"upgradeLevel"`
 }
 
 // Validate validates this user
 func (m *User) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateAutoClicker(formats); err != nil {
+	if err := m.validateClickCount(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateClickBooster(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateCoinNumber(formats); err != nil {
+	if err := m.validateHasAutoClicker(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateTgID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpgradeLevel(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -62,27 +62,18 @@ func (m *User) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *User) validateAutoClicker(formats strfmt.Registry) error {
+func (m *User) validateClickCount(formats strfmt.Registry) error {
 
-	if err := validate.Required("auto_clicker", "body", m.AutoClicker); err != nil {
+	if err := validate.Required("clickCount", "body", m.ClickCount); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (m *User) validateClickBooster(formats strfmt.Registry) error {
+func (m *User) validateHasAutoClicker(formats strfmt.Registry) error {
 
-	if err := validate.Required("click_booster", "body", m.ClickBooster); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *User) validateCoinNumber(formats strfmt.Registry) error {
-
-	if err := validate.Required("coin_number", "body", m.CoinNumber); err != nil {
+	if err := validate.Required("hasAutoClicker", "body", m.HasAutoClicker); err != nil {
 		return err
 	}
 
@@ -92,6 +83,15 @@ func (m *User) validateCoinNumber(formats strfmt.Registry) error {
 func (m *User) validateTgID(formats strfmt.Registry) error {
 
 	if err := validate.Required("tg_id", "body", m.TgID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *User) validateUpgradeLevel(formats strfmt.Registry) error {
+
+	if err := validate.Required("upgradeLevel", "body", m.UpgradeLevel); err != nil {
 		return err
 	}
 

@@ -95,17 +95,17 @@ definitions:
     type: object
     required:
       - tg_id
-      - coin_number
-      - click_booster
-      - auto_clicker
+      - clickCount
+      - upgradeLevel
+      - hasAutoClicker
     properties:
       tg_id:
         type: integer
-      coin_number:
+      clickCount:
         type: integer
-      click_booster:
+      upgradeLevel:
         type: integer
-      auto_clicker:
+      hasAutoClicker:
         type: boolean
 
   Error:
@@ -120,15 +120,15 @@ definitions:
     type: object
     required:
       - tg_id
-      - coin_number
-      - click_booster
-      - auto_clicker
+      - clickCount
+      - upgradeLevel
+      - hasAutoClicker
     properties:
       tg_id:
         type: integer
-      coin_number:
+      clickCount:
         type: integer
-      click_booster:
+      upgradeLevel:
         type: integer
-      auto_clicker:
+      hasAutoClicker:
         type: boolean
