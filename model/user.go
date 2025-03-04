@@ -8,6 +8,10 @@ import (
 
 var (
 	UserDataSaved = "user data was saved"
+
+	StartedAutoClicker = "auto clicker was started"
+	StoppedAutoClicker = "auto clicker was stopped"
+	HasNotAutoClicker  = "user has not auto clicker"
 )
 
 type User struct {

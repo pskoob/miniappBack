@@ -48,6 +48,12 @@ func NewMaxonBackAPI(spec *loads.Document) *MaxonBackAPI {
 		SaveProgressHandler: SaveProgressHandlerFunc(func(params SaveProgressParams) middleware.Responder {
 			return middleware.NotImplemented("operation SaveProgress has not yet been implemented")
 		}),
+		StartAutoClickerHandler: StartAutoClickerHandlerFunc(func(params StartAutoClickerParams) middleware.Responder {
+			return middleware.NotImplemented("operation StartAutoClicker has not yet been implemented")
+		}),
+		StopAutoClickerHandler: StopAutoClickerHandlerFunc(func(params StopAutoClickerParams) middleware.Responder {
+			return middleware.NotImplemented("operation StopAutoClicker has not yet been implemented")
+		}),
 	}
 }
 
@@ -88,6 +94,10 @@ type MaxonBackAPI struct {
 	GetUserProgressHandler GetUserProgressHandler
 	// SaveProgressHandler sets the operation handler for the save progress operation
 	SaveProgressHandler SaveProgressHandler
+	// StartAutoClickerHandler sets the operation handler for the start auto clicker operation
+	StartAutoClickerHandler StartAutoClickerHandler
+	// StopAutoClickerHandler sets the operation handler for the stop auto clicker operation
+	StopAutoClickerHandler StopAutoClickerHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -170,6 +180,12 @@ func (o *MaxonBackAPI) Validate() error {
 	}
 	if o.SaveProgressHandler == nil {
 		unregistered = append(unregistered, "SaveProgressHandler")
+	}
+	if o.StartAutoClickerHandler == nil {
+		unregistered = append(unregistered, "StartAutoClickerHandler")
+	}
+	if o.StopAutoClickerHandler == nil {
+		unregistered = append(unregistered, "StopAutoClickerHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -267,6 +283,14 @@ func (o *MaxonBackAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/save_progress"] = NewSaveProgress(o.context, o.SaveProgressHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/start_auto_clicker/{tg_id}"] = NewStartAutoClicker(o.context, o.StartAutoClickerHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/stop_auto_clicker/{tg_id}"] = NewStopAutoClicker(o.context, o.StopAutoClickerHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

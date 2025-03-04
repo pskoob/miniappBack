@@ -60,6 +60,10 @@ type ClientService interface {
 
 	SaveProgress(params *SaveProgressParams, opts ...ClientOption) (*SaveProgressOK, error)
 
+	StartAutoClicker(params *StartAutoClickerParams, opts ...ClientOption) (*StartAutoClickerOK, error)
+
+	StopAutoClicker(params *StopAutoClickerParams, opts ...ClientOption) (*StopAutoClickerOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -136,6 +140,82 @@ func (a *Client) SaveProgress(params *SaveProgressParams, opts ...ClientOption) 
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for SaveProgress: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+StartAutoClicker starts auto clicker
+*/
+func (a *Client) StartAutoClicker(params *StartAutoClickerParams, opts ...ClientOption) (*StartAutoClickerOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewStartAutoClickerParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "StartAutoClicker",
+		Method:             "POST",
+		PathPattern:        "/start_auto_clicker/{tg_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &StartAutoClickerReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*StartAutoClickerOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for StartAutoClicker: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+StopAutoClicker stops auto clicker
+*/
+func (a *Client) StopAutoClicker(params *StopAutoClickerParams, opts ...ClientOption) (*StopAutoClickerOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewStopAutoClickerParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "StopAutoClicker",
+		Method:             "POST",
+		PathPattern:        "/stop_auto_clicker/{tg_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &StopAutoClickerReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*StopAutoClickerOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for StopAutoClicker: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

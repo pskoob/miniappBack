@@ -80,8 +80,11 @@ func main() {
 	}
 	go bot.ListenUpdates()
 
+	autoClickerTasks := make(map[int64]context.CancelFunc)
+
 	appHandler := handler.New(
 		userUsecase,
+		autoClickerTasks,
 	)
 
 	chain := alice.New(appHandler.WsMiddleware).Then(appHandler)

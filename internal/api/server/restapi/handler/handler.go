@@ -4,6 +4,7 @@ import (
 	// "context"
 	// "fmt"
 
+	"context"
 	"net/http"
 	"strings"
 
@@ -18,13 +19,15 @@ import (
 )
 
 type Handler struct {
-	userUsecase model.IUserUsecase
+	userUsecase      model.IUserUsecase
+	autoClickerTasks map[int64]context.CancelFunc
 
 	router http.Handler
 }
 
 func New(
 	userUsecase model.IUserUsecase,
+	autoClickerTasks map[int64]context.CancelFunc,
 ) *Handler {
 
 	withChangedVersion := strings.ReplaceAll(string(restapi.SwaggerJSON), "development", "1")
@@ -34,7 +37,8 @@ func New(
 	}
 
 	h := &Handler{
-		userUsecase: userUsecase,
+		userUsecase:      userUsecase,
+		autoClickerTasks: autoClickerTasks,
 	}
 
 	zap.L().Error("server http handler request")
@@ -45,6 +49,10 @@ func New(
 	// Progress
 	router.GetUserProgressHandler = api.GetUserProgressHandlerFunc(h.GetUserProgressHandler)
 	router.SaveProgressHandler = api.SaveProgressHandlerFunc(h.SaveUserProgressHandler)
+
+	// Auto clicker
+	router.StartAutoClickerHandler = api.StartAutoClickerHandlerFunc(h.StartAutoClickerHandler)
+	router.StopAutoClickerHandler = api.StopAutoClickerHandlerFunc(h.StopAutoClickerHandler)
 
 	h.router = router.Serve(nil)
 
