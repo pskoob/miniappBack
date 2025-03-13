@@ -34,7 +34,10 @@ type User struct {
 	// upgrade level
 	// Required: true
 	UpgradeLevel *int64 `json:"upgradeLevel"`
-	
+
+	// upgrade energy
+	// Required: true
+	UpgradeEnergy *int64 `json:"upgrade_energy"`
 }
 
 // Validate validates this user
@@ -54,6 +57,10 @@ func (m *User) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateUpgradeLevel(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpgradeEnergy(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -93,6 +100,15 @@ func (m *User) validateTgID(formats strfmt.Registry) error {
 func (m *User) validateUpgradeLevel(formats strfmt.Registry) error {
 
 	if err := validate.Required("upgradeLevel", "body", m.UpgradeLevel); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *User) validateUpgradeEnergy(formats strfmt.Registry) error {
+
+	if err := validate.Required("upgrade_energy", "body", m.UpgradeEnergy); err != nil {
 		return err
 	}
 

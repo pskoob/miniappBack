@@ -193,12 +193,14 @@ definitions:
       - tg_id
       - clickCount
       - upgradeLevel
-      - upgradeEnergy
+      - upgrade_energy
       - hasAutoClicker
     properties:
       tg_id:
         type: integer
-      upgradeEnergy:
+      upgrade_energy:
+        type: integer
+      upgradeLevel:
         type: integer
       clickCount:
         type: integer

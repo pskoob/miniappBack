@@ -31,6 +31,10 @@ type Progress struct {
 	// Required: true
 	TgID *int64 `json:"tg_id"`
 
+	// upgrade energy
+	// Required: true
+	UpgradeEnergy *int64 `json:"upgradeEnergy"`
+
 	// upgrade level
 	// Required: true
 	UpgradeLevel *int64 `json:"upgradeLevel"`
@@ -49,6 +53,10 @@ func (m *Progress) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateTgID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpgradeEnergy(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -83,6 +91,15 @@ func (m *Progress) validateHasAutoClicker(formats strfmt.Registry) error {
 func (m *Progress) validateTgID(formats strfmt.Registry) error {
 
 	if err := validate.Required("tg_id", "body", m.TgID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Progress) validateUpgradeEnergy(formats strfmt.Registry) error {
+
+	if err := validate.Required("upgradeEnergy", "body", m.UpgradeEnergy); err != nil {
 		return err
 	}
 

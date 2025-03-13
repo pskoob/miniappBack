@@ -252,6 +252,7 @@ func init() {
         "tg_id",
         "clickCount",
         "upgradeLevel",
+        "upgradeEnergy",
         "hasAutoClicker"
       ],
       "properties": {
@@ -262,6 +263,9 @@ func init() {
           "type": "boolean"
         },
         "tg_id": {
+          "type": "integer"
+        },
+        "upgradeEnergy": {
           "type": "integer"
         },
         "upgradeLevel": {
@@ -275,6 +279,7 @@ func init() {
         "tg_id",
         "clickCount",
         "upgradeLevel",
+        "upgrade_energy",
         "hasAutoClicker"
       ],
       "properties": {
@@ -288,6 +293,9 @@ func init() {
           "type": "integer"
         },
         "upgradeLevel": {
+          "type": "integer"
+        },
+        "upgrade_energy": {
           "type": "integer"
         }
       }
@@ -536,6 +544,7 @@ func init() {
         "tg_id",
         "clickCount",
         "upgradeLevel",
+        "upgradeEnergy",
         "hasAutoClicker"
       ],
       "properties": {
@@ -546,6 +555,9 @@ func init() {
           "type": "boolean"
         },
         "tg_id": {
+          "type": "integer"
+        },
+        "upgradeEnergy": {
           "type": "integer"
         },
         "upgradeLevel": {
@@ -559,6 +571,7 @@ func init() {
         "tg_id",
         "clickCount",
         "upgradeLevel",
+        "upgrade_energy",
         "hasAutoClicker"
       ],
       "properties": {
@@ -572,6 +585,9 @@ func init() {
           "type": "integer"
         },
         "upgradeLevel": {
+          "type": "integer"
+        },
+        "upgrade_energy": {
           "type": "integer"
         }
       }
