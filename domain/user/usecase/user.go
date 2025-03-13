@@ -24,6 +24,6 @@ func (u *Usecase) GetUserByTgID(ctx context.Context, tgID int64) (model.User, er
 	return u.userRepository.GetUserByTgID(ctx, tgID)
 }
 
-func (u *Usecase) SaveProgressByTgID(ctx context.Context, autoClicker bool, clickBooster int64, balance int64, tgID int64) error {
-	return u.userRepository.SaveProgressByTgID(ctx, autoClicker, clickBooster, balance, tgID)
+func (u *Usecase) SaveProgressByTgID(ctx context.Context, autoClicker bool, clickBooster int64, energyBooster int64, balance int64, tgID int64) error {
+	return u.userRepository.SaveProgressByTgID(ctx, autoClicker, clickBooster, energyBooster, balance, tgID)
 }

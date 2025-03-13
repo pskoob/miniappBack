@@ -13,7 +13,7 @@ func (h *Handler) SaveUserProgressHandler(req api.SaveProgressParams) middleware
 
 	ctx := req.HTTPRequest.Context()
 
-	err := h.userUsecase.SaveProgressByTgID(ctx, *req.Progress.HasAutoClicker, *req.Progress.UpgradeLevel, *req.Progress.ClickCount, *req.Progress.TgID)
+	err := h.userUsecase.SaveProgressByTgID(ctx, *req.Progress.HasAutoClicker, *req.Progress.UpgradeLevel, *req.Progress.UpgradeEnergy, *req.Progress.ClickCount, *req.Progress.TgID)
 	if err != nil {
 		zap.L().Error("error save user data", zap.Error(err))
 		return api.NewSaveProgressInternalServerError()
@@ -39,5 +39,6 @@ func (h *Handler) GetUserProgressHandler(req api.GetUserProgressParams) middlewa
 		ClickCount:     &user.Balance.Int64,
 		HasAutoClicker: &user.AutoClicker,
 		UpgradeLevel:   &user.ClickBooster.Int64,
+		UpgradeEnergy:  &user.EnergyBooster.Int64,
 	})
 }

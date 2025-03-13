@@ -34,6 +34,7 @@ type User struct {
 	// upgrade level
 	// Required: true
 	UpgradeLevel *int64 `json:"upgradeLevel"`
+	
 }
 
 // Validate validates this user

@@ -165,6 +165,7 @@ definitions:
       - tg_id
       - clickCount
       - upgradeLevel
+      - upgradeEnergy
       - hasAutoClicker
     properties:
       tg_id:
@@ -172,6 +173,8 @@ definitions:
       clickCount:
         type: integer
       upgradeLevel:
+        type: integer
+      upgradeEnergy:
         type: integer
       hasAutoClicker:
         type: boolean
@@ -190,13 +193,14 @@ definitions:
       - tg_id
       - clickCount
       - upgradeLevel
+      - upgradeEnergy
       - hasAutoClicker
     properties:
       tg_id:
         type: integer
-      clickCount:
+      upgradeEnergy:
         type: integer
-      upgradeLevel:
+      clickCount:
         type: integer
       hasAutoClicker:
         type: boolean

@@ -56,6 +56,7 @@ func (r *UserRepository) GetUserByTgID(ctx context.Context, tgID int64) (model.U
 		"users.username",
 		"users.balance",
 		"users.click_booster",
+		"users.energy_booster",
 		"users.auto_clicker",
 		"users.updated_at",
 		"users.created_at",
@@ -77,9 +78,10 @@ func (r *UserRepository) GetUserByTgID(ctx context.Context, tgID int64) (model.U
 	return user, err
 }
 
-func (r *UserRepository) SaveProgressByTgID(ctx context.Context, autoClicker bool, clickBooster int64, balance int64, tgID int64) error {
+func (r *UserRepository) SaveProgressByTgID(ctx context.Context, autoClicker bool, clickBooster int64, energyBooster int64, balance int64, tgID int64) error {
 	query, params, err := postgresql.Builder.Update("users").
 		Set("click_booster", clickBooster).
+		Set("energy_booster", energyBooster).
 		Set("auto_clicker", autoClicker).
 		Set("balance", balance).
 		Set("updated_at", time.Now().UTC()).

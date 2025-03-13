@@ -69,46 +69,60 @@ func (h *Handler) StopAutoClickerHandler(req api.StopAutoClickerParams) middlewa
 }
 
 func (h *Handler) startAutoClickerForUser(ctx context.Context, user model.User) {
-	duration := 3 * time.Hour                 // Время работы автокликера
-	ticker := time.NewTicker(1 * time.Second) // Создаем тикер, который будет срабатывать каждую секунду
-	defer ticker.Stop()                       // Убедимся, что тикер остановится, когда функция завершится
+	duration := 30 * time.Minute                    // Время работы автокликера
+	actionTicker := time.NewTicker(1 * time.Second) // Тикер для выполнения действий каждую секунду
+	saveTicker := time.NewTicker(5 * time.Second)   // Тикер для сохранения данных каждые n секунд (например, 5 секунд)
+	defer actionTicker.Stop()                       // Остановка тикера действий
+	defer saveTicker.Stop()                         // Остановка тикера сохранения
 
 	endTime := time.Now().Add(duration) // Время окончания работы автокликера
 	balance := user.Balance.Int64
+
 	for {
 		select {
-		case <-ticker.C: // Каждую секунду выполняем действие
-			// Здесь вы можете реализовать логику "тапа"
+		case <-actionTicker.C: // Каждую секунду выполняем действие
+			// Логика "тапа"
 			oneTap := user.ClickBooster.Int64 + 1
 			balance += 1
 			zap.L().Info("Auto clicker tapped for user", zap.Int64("tgID", user.TgID.Int64), zap.Int64("oneTap", oneTap))
 			zap.L().Info("user balance: ", zap.Int64("", balance))
 
-			// Если время работы автокликера истекло, выходим из цикла
-			if time.Now().After(endTime) {
-				// Создаем новый контекст для сохранения данных
-				saveCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-				defer cancel()
-
-				err := h.userUsecase.SaveProgressByTgID(saveCtx, user.AutoClicker, user.ClickBooster.Int64, balance, user.TgID.Int64)
-				if err != nil {
-					zap.L().Error("error save user data", zap.Error(err))
-				}
-
-				zap.L().Info("Auto clicker finished for user", zap.Int64("tgID", user.TgID.Int64))
-				return
-			}
-
-		case <-ctx.Done(): // Если контекст отменен, выходим из цикла
-			// Создаем новый контекст для сохранения данных
+		case <-saveTicker.C: // Каждые n секунд сохраняем данные
 			saveCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
 
-			err := h.userUsecase.SaveProgressByTgID(saveCtx, user.AutoClicker, user.ClickBooster.Int64, balance, user.TgID.Int64)
+			err := h.userUsecase.SaveProgressByTgID(saveCtx, user.AutoClicker, user.ClickBooster.Int64, user.EnergyBooster.Int64, balance, user.TgID.Int64)
+			if err != nil {
+				zap.L().Error("error save user data", zap.Error(err))
+			} else {
+				zap.L().Info("User  data saved successfully for tgID", zap.Int64("tgID", user.TgID.Int64))
+			}
+
+		case <-ctx.Done(): // Если контекст отменен, выходим из цикла
+			// Сохраняем данные перед выходом
+			saveCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+
+			err := h.userUsecase.SaveProgressByTgID(saveCtx, user.AutoClicker, user.ClickBooster.Int64, user.EnergyBooster.Int64, balance, user.TgID.Int64)
 			if err != nil {
 				zap.L().Error("error save user data", zap.Error(err))
 			}
 			zap.L().Info("Auto clicker stopped for user", zap.Int64("tgID", user.TgID.Int64))
+			return
+		}
+
+		// Если время работы автокликера истекло, выходим из цикла
+		if time.Now().After(endTime) {
+			// Сохраняем данные перед выходом
+			saveCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+
+			err := h.userUsecase.SaveProgressByTgID(saveCtx, user.AutoClicker, user.ClickBooster.Int64, user.EnergyBooster.Int64, balance, user.TgID.Int64)
+			if err != nil {
+				zap.L().Error("error save user data", zap.Error(err))
+			}
+
+			zap.L().Info("Auto clicker finished for user", zap.Int64("tgID", user.TgID.Int64))
 			return
 		}
 	}
