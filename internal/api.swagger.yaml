@@ -155,6 +155,74 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/Error'
+
+    /start_energy_collect/{tg_id}:
+    post:
+      summary: Start Energy Offline
+      operationId: StartEnergyOffline
+      tags: 
+        - Energy
+      parameters:
+        - name: tg_id
+          in: path
+          required: true
+          type: integer
+          description: The tg ID of user
+      responses:
+        200:
+          description: Start Collect Energy Response
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error' 
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: "#/definitions/Error"        
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /stop_energy_collect/{tg_id}:
+    post:
+      summary: Stop Energy Offline
+      operationId: StopEnergyOffline
+      tags: 
+        - Energy
+      parameters:
+        - name: tg_id
+          in: path
+          required: true
+          type: integer
+          description: The tg ID of user
+      responses:
+        200:
+          description: Stop Collect Energy Response
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error' 
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: "#/definitions/Error"        
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
       
 
 definitions:
