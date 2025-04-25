@@ -21,11 +21,11 @@ type Progress struct {
 
 	// click count
 	// Required: true
-	ClickCount *int64 `json:"clickCount"`
+	ClickCount *int64 `json:"click_count"`
 
 	// has auto clicker
 	// Required: true
-	HasAutoClicker *bool `json:"hasAutoClicker"`
+	HasAutoClicker *bool `json:"has_auto_clicker"`
 
 	// tg id
 	// Required: true
@@ -33,11 +33,11 @@ type Progress struct {
 
 	// upgrade energy
 	// Required: true
-	UpgradeEnergy *int64 `json:"upgradeEnergy"`
+	UpgradeEnergy *int64 `json:"upgrade_energy"`
 
 	// upgrade level
 	// Required: true
-	UpgradeLevel *int64 `json:"upgradeLevel"`
+	UpgradeLevel *int64 `json:"upgrade_level"`
 }
 
 // Validate validates this progress
@@ -72,7 +72,7 @@ func (m *Progress) Validate(formats strfmt.Registry) error {
 
 func (m *Progress) validateClickCount(formats strfmt.Registry) error {
 
-	if err := validate.Required("clickCount", "body", m.ClickCount); err != nil {
+	if err := validate.Required("click_count", "body", m.ClickCount); err != nil {
 		return err
 	}
 
@@ -81,7 +81,7 @@ func (m *Progress) validateClickCount(formats strfmt.Registry) error {
 
 func (m *Progress) validateHasAutoClicker(formats strfmt.Registry) error {
 
-	if err := validate.Required("hasAutoClicker", "body", m.HasAutoClicker); err != nil {
+	if err := validate.Required("has_auto_clicker", "body", m.HasAutoClicker); err != nil {
 		return err
 	}
 
@@ -99,7 +99,7 @@ func (m *Progress) validateTgID(formats strfmt.Registry) error {
 
 func (m *Progress) validateUpgradeEnergy(formats strfmt.Registry) error {
 
-	if err := validate.Required("upgradeEnergy", "body", m.UpgradeEnergy); err != nil {
+	if err := validate.Required("upgrade_energy", "body", m.UpgradeEnergy); err != nil {
 		return err
 	}
 
@@ -108,7 +108,7 @@ func (m *Progress) validateUpgradeEnergy(formats strfmt.Registry) error {
 
 func (m *Progress) validateUpgradeLevel(formats strfmt.Registry) error {
 
-	if err := validate.Required("upgradeLevel", "body", m.UpgradeLevel); err != nil {
+	if err := validate.Required("upgrade_level", "body", m.UpgradeLevel); err != nil {
 		return err
 	}
 

@@ -28,6 +28,12 @@ import (
 	_userRepo "github.com/pskoob/miniappBack/domain/user/repository/postgresql"
 	_userUsecase "github.com/pskoob/miniappBack/domain/user/usecase"
 
+	_cardRepo "github.com/pskoob/miniappBack/domain/card/repository/postgresql"
+	_cardUsecase "github.com/pskoob/miniappBack/domain/card/usecase"
+
+	_userCardRepo "github.com/pskoob/miniappBack/domain/user_card/repository/postgresql"
+	_userCardUsecase "github.com/pskoob/miniappBack/domain/user_card/usecase"
+
 	_bot "github.com/pskoob/miniappBack/bot"
 )
 
@@ -74,7 +80,13 @@ func main() {
 	userRepo := _userRepo.New(sqalxConn)
 	userUsecase := _userUsecase.New(userRepo)
 
-	bot, err := _bot.New(userUsecase, cfg.ApiKey)
+	cardRepo := _cardRepo.New(sqalxConn)
+	cardUsecase := _cardUsecase.New(cardRepo)
+
+	userCardRepo := _userCardRepo.New(sqalxConn)
+	userCardUsecase := _userCardUsecase.New(userCardRepo)
+
+	bot, err := _bot.New(userUsecase, userCardUsecase, cardUsecase, cfg.ApiKey)
 	if err != nil {
 		zap.L().Error("error init tg bot", zap.Error(err))
 	}
@@ -85,6 +97,9 @@ func main() {
 	appHandler := handler.New(
 		userUsecase,
 		autoClickerTasks,
+		cardUsecase,
+		userCardUsecase,
+
 		cfg.SecretKey,
 		cfg.SendingAccount,
 	)

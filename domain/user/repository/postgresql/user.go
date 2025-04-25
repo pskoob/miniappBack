@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/pskoob/miniappBack/database/postgresql"
@@ -23,41 +22,36 @@ func New(sqalxConn sqalx.Node) model.IUserRepository {
 	return &UserRepository{sqalxConn: sqalxConn}
 }
 
-func (r *UserRepository) CreateUser(ctx context.Context, user model.User) error {
+func (r *UserRepository) CreateUser(ctx context.Context, user model.User) (int64, error) {
 	query, params, err := postgresql.Builder.Insert("users").
 		Columns(
-			"name",
 			"tg_id",
 			"username",
 		).
 		Values(
-			user.Name,
 			user.TgID,
 			user.Username,
 		).
 		Suffix("RETURNING id").
 		ToSql()
 	if err != nil {
-		return err
+		return 0, err
 	}
 	zap.L().Debug(postgresql.BuildQuery(query, params))
 
-	var newProjectID string
-	err = r.sqalxConn.GetContext(ctx, &newProjectID, query, params...)
-	return err
+	var userID int64
+	err = r.sqalxConn.GetContext(ctx, &userID, query, params...)
+	return userID, err
 }
 
 func (r *UserRepository) GetUserByTgID(ctx context.Context, tgID int64) (model.User, error) {
 	var user model.User
 	query, params, err := postgresql.Builder.Select(
 		"users.id",
-		"users.name",
 		"users.tg_id",
 		"users.username",
+		"users.wallet",
 		"users.balance",
-		"users.click_booster",
-		"users.energy_booster",
-		"users.auto_clicker",
 		"users.updated_at",
 		"users.created_at",
 	).
@@ -74,15 +68,26 @@ func (r *UserRepository) GetUserByTgID(ctx context.Context, tgID int64) (model.U
 		}
 	}
 
-	fmt.Println(err)
 	return user, err
+}
+
+func (r *UserRepository) UpdateUserBalance(ctx context.Context, tgID int64, balance int64) error {
+	query, params, err := postgresql.Builder.Update("users").
+		Set("balance", balance).
+		Set("updated_at", time.Now().UTC()).
+		Where(sq.Eq{"tg_id": tgID}).
+		ToSql()
+	if err != nil {
+		return err
+	}
+
+	zap.L().Debug(postgresql.BuildQuery(query, params))
+	_, err = r.sqalxConn.ExecContext(ctx, query, params...)
+	return err
 }
 
 func (r *UserRepository) SaveProgressByTgID(ctx context.Context, autoClicker bool, clickBooster int64, energyBooster int64, balance int64, tgID int64) error {
 	query, params, err := postgresql.Builder.Update("users").
-		Set("click_booster", clickBooster).
-		Set("energy_booster", energyBooster).
-		Set("auto_clicker", autoClicker).
 		Set("balance", balance).
 		Set("updated_at", time.Now().UTC()).
 		Where(sq.Eq{"tg_id": tgID}).

@@ -424,25 +424,25 @@ func init() {
       "type": "object",
       "required": [
         "tg_id",
-        "clickCount",
-        "upgradeLevel",
-        "upgradeEnergy",
-        "hasAutoClicker"
+        "click_count",
+        "upgrade_level",
+        "upgrade_energy",
+        "has_auto_clicker"
       ],
       "properties": {
-        "clickCount": {
+        "click_count": {
           "type": "integer"
         },
-        "hasAutoClicker": {
+        "has_auto_clicker": {
           "type": "boolean"
         },
         "tg_id": {
           "type": "integer"
         },
-        "upgradeEnergy": {
+        "upgrade_energy": {
           "type": "integer"
         },
-        "upgradeLevel": {
+        "upgrade_level": {
           "type": "integer"
         }
       }
@@ -451,25 +451,25 @@ func init() {
       "type": "object",
       "required": [
         "tg_id",
-        "clickCount",
-        "upgradeLevel",
+        "click_count",
+        "upgrade_level",
         "upgrade_energy",
-        "hasAutoClicker"
+        "has_auto_clicker"
       ],
       "properties": {
-        "clickCount": {
+        "click_count": {
           "type": "integer"
         },
-        "hasAutoClicker": {
+        "has_auto_clicker": {
           "type": "boolean"
         },
         "tg_id": {
           "type": "integer"
         },
-        "upgradeLevel": {
+        "upgrade_energy": {
           "type": "integer"
         },
-        "upgrade_energy": {
+        "upgrade_level": {
           "type": "integer"
         }
       }
@@ -890,25 +890,25 @@ func init() {
       "type": "object",
       "required": [
         "tg_id",
-        "clickCount",
-        "upgradeLevel",
-        "upgradeEnergy",
-        "hasAutoClicker"
+        "click_count",
+        "upgrade_level",
+        "upgrade_energy",
+        "has_auto_clicker"
       ],
       "properties": {
-        "clickCount": {
+        "click_count": {
           "type": "integer"
         },
-        "hasAutoClicker": {
+        "has_auto_clicker": {
           "type": "boolean"
         },
         "tg_id": {
           "type": "integer"
         },
-        "upgradeEnergy": {
+        "upgrade_energy": {
           "type": "integer"
         },
-        "upgradeLevel": {
+        "upgrade_level": {
           "type": "integer"
         }
       }
@@ -917,25 +917,25 @@ func init() {
       "type": "object",
       "required": [
         "tg_id",
-        "clickCount",
-        "upgradeLevel",
+        "click_count",
+        "upgrade_level",
         "upgrade_energy",
-        "hasAutoClicker"
+        "has_auto_clicker"
       ],
       "properties": {
-        "clickCount": {
+        "click_count": {
           "type": "integer"
         },
-        "hasAutoClicker": {
+        "has_auto_clicker": {
           "type": "boolean"
         },
         "tg_id": {
           "type": "integer"
         },
-        "upgradeLevel": {
+        "upgrade_energy": {
           "type": "integer"
         },
-        "upgrade_energy": {
+        "upgrade_level": {
           "type": "integer"
         }
       }

@@ -1,6 +1,10 @@
 package handler
 
 import (
+	"database/sql"
+	"fmt"
+	"time"
+
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/pskoob/miniappBack/internal/api/definition"
 	"github.com/pskoob/miniappBack/internal/api/server/restapi/api"
@@ -13,9 +17,81 @@ func (h *Handler) SaveUserProgressHandler(req api.SaveProgressParams) middleware
 
 	ctx := req.HTTPRequest.Context()
 
-	err := h.userUsecase.SaveProgressByTgID(ctx, *req.Progress.HasAutoClicker, *req.Progress.UpgradeLevel, *req.Progress.UpgradeEnergy, *req.Progress.ClickCount, *req.Progress.TgID)
+	fmt.Println("1")
+	user, err := h.userUsecase.GetUserByTgID(ctx, *req.Progress.TgID)
 	if err != nil {
-		zap.L().Error("error save user data", zap.Error(err))
+		zap.L().Error("no such user", zap.Error(err))
+		return api.NewSaveProgressBadRequest().WithPayload(&definition.Error{
+			Message: &model.NoSuchUser,
+		})
+	}
+
+	fmt.Println("2")
+
+	userCards, err := h.userCardUsecase.GetUserCardsByUserID(ctx, user.ID)
+	if err != nil {
+		zap.L().Error("no such user", zap.Error(err))
+		return api.NewSaveProgressBadRequest().WithPayload(&definition.Error{
+			Message: &model.NoSuchUser,
+		})
+	}
+
+	fmt.Println("3")
+
+	for i := range userCards {
+		if userCards[i].CardName == model.AutoClicker && !userCards[i].AutoClicker.Bool {
+			autoClickerUserCard := model.UserCard{
+				UserID:      userCards[i].UserID,
+				CardID:      userCards[i].CardID,
+				CardName:    userCards[i].CardName,
+				AutoClicker: sql.NullBool{Bool: true, Valid: true},
+			}
+			err := h.userCardUsecase.UpdateUserCardByUserID(ctx, autoClickerUserCard)
+			if err != nil {
+				zap.L().Error("error update autor clicker user card", zap.Error(err))
+				return api.NewSaveProgressInternalServerError()
+			}
+		}
+		fmt.Println("4")
+
+		if userCards[i].CardName == model.EnergyBooster {
+			energyBoosterUserCard := model.UserCard{
+				UserID:       userCards[i].UserID,
+				CardID:       userCards[i].CardID,
+				CardName:     userCards[i].CardName,
+				CurrentLevel: *req.Progress.UpgradeEnergy,
+				UpdatedAt:    sql.NullTime{Time: time.Now(), Valid: true},
+			}
+			err := h.userCardUsecase.UpdateUserCardByUserID(ctx, energyBoosterUserCard)
+			if err != nil {
+				zap.L().Error("error update energy booster user card", zap.Error(err))
+				return api.NewSaveProgressInternalServerError()
+			}
+		}
+		fmt.Println("5")
+
+		if userCards[i].CardName == model.PowerClick {
+			powerClickUserCard := model.UserCard{
+				UserID:       userCards[i].UserID,
+				CardID:       userCards[i].CardID,
+				CardName:     userCards[i].CardName,
+				CurrentLevel: *req.Progress.UpgradeLevel,
+				UpdatedAt:    sql.NullTime{Time: time.Now(), Valid: true},
+			}
+			err := h.userCardUsecase.UpdateUserCardByUserID(ctx, powerClickUserCard)
+			if err != nil {
+				zap.L().Error("error update power click user card", zap.Error(err))
+				return api.NewSaveProgressInternalServerError()
+			}
+		}
+		fmt.Println("6")
+	}
+
+	fmt.Println("7")
+
+	err = h.userUsecase.UpdateUserBalance(ctx, user.TgID.Int64, *req.Progress.ClickCount)
+	if err != nil {
+		zap.L().Error("error update user balance", zap.Error(err))
 		return api.NewSaveProgressInternalServerError()
 	}
 	return api.NewSaveProgressOK().WithPayload(&definition.Error{
@@ -35,10 +111,7 @@ func (h *Handler) GetUserProgressHandler(req api.GetUserProgressParams) middlewa
 	}
 
 	return api.NewGetUserProgressOK().WithPayload(&definition.User{
-		TgID:           &user.TgID.Int64,
-		ClickCount:     &user.Balance.Int64,
-		HasAutoClicker: &user.AutoClicker,
-		UpgradeLevel:   &user.ClickBooster.Int64,
-		UpgradeEnergy:  &user.EnergyBooster.Int64,
+		TgID:       &user.TgID.Int64,
+		ClickCount: &user.Balance.Int64,
 	})
 }

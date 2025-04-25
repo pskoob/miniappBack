@@ -22,7 +22,24 @@ func (h *Handler) StartAutoClickerHandler(req api.StartAutoClickerParams) middle
 		return api.NewGetUserProgressInternalServerError()
 	}
 
-	if user.AutoClicker {
+	userCards, err := h.userCardUsecase.GetUserCardsByUserID(ctx, user.ID)
+	if err != nil {
+		zap.L().Error("user do not have boost cards", zap.Error(err))
+		return api.NewStartAutoClickerBadRequest().WithPayload(&definition.Error{
+			Message: &model.HasNotAutoClicker,
+		})
+	}
+
+	userAutoClicker := false
+
+	for i := range userCards {
+		if userCards[i].AutoClicker.Bool {
+			userAutoClicker = true
+			break
+		}
+	}
+
+	if userAutoClicker {
 		// Если автокликер уже запущен, отменяем его
 		if cancelFunc, exists := h.autoClickerTasks[user.TgID.Int64]; exists {
 			cancelFunc() // Останавливаем предыдущий автокликер
@@ -78,11 +95,25 @@ func (h *Handler) startAutoClickerForUser(ctx context.Context, user model.User) 
 	endTime := time.Now().Add(duration) // Время окончания работы автокликера
 	balance := user.Balance.Int64
 
+	userCards, err := h.userCardUsecase.GetUserCardsByUserID(ctx, user.ID)
+	if err != nil {
+		zap.L().Error("error get user cards", zap.Error(err))
+	}
+
+	var powerClick model.UserCard
+
 	for {
 		select {
 		case <-actionTicker.C: // Каждую секунду выполняем действие
 			// Логика "тапа"
-			oneTap := user.ClickBooster.Int64 + 1
+
+			for i := range userCards {
+				if userCards[i].CardName == model.PowerClick {
+					powerClick = userCards[i]
+				}
+			}
+
+			oneTap := powerClick.CurrentLevel + 1
 			balance += 1
 			zap.L().Info("Auto clicker tapped for user", zap.Int64("tgID", user.TgID.Int64), zap.Int64("oneTap", oneTap))
 			zap.L().Info("user balance: ", zap.Int64("", balance))
@@ -91,7 +122,7 @@ func (h *Handler) startAutoClickerForUser(ctx context.Context, user model.User) 
 			saveCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
 
-			err := h.userUsecase.SaveProgressByTgID(saveCtx, user.AutoClicker, user.ClickBooster.Int64, user.EnergyBooster.Int64, balance, user.TgID.Int64)
+			err := h.userUsecase.UpdateUserBalance(saveCtx, user.TgID.Int64, balance)
 			if err != nil {
 				zap.L().Error("error save user data", zap.Error(err))
 			} else {
@@ -103,7 +134,7 @@ func (h *Handler) startAutoClickerForUser(ctx context.Context, user model.User) 
 			saveCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
 
-			err := h.userUsecase.SaveProgressByTgID(saveCtx, user.AutoClicker, user.ClickBooster.Int64, user.EnergyBooster.Int64, balance, user.TgID.Int64)
+			err := h.userUsecase.UpdateUserBalance(saveCtx, user.TgID.Int64, balance)
 			if err != nil {
 				zap.L().Error("error save user data", zap.Error(err))
 			}
@@ -117,7 +148,7 @@ func (h *Handler) startAutoClickerForUser(ctx context.Context, user model.User) 
 			saveCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
 
-			err := h.userUsecase.SaveProgressByTgID(saveCtx, user.AutoClicker, user.ClickBooster.Int64, user.EnergyBooster.Int64, balance, user.TgID.Int64)
+			err := h.userUsecase.UpdateUserBalance(saveCtx, user.TgID.Int64, balance)
 			if err != nil {
 				zap.L().Error("error save user data", zap.Error(err))
 			}

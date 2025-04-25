@@ -21,23 +21,23 @@ type User struct {
 
 	// click count
 	// Required: true
-	ClickCount *int64 `json:"clickCount"`
+	ClickCount *int64 `json:"click_count"`
 
 	// has auto clicker
 	// Required: true
-	HasAutoClicker *bool `json:"hasAutoClicker"`
+	HasAutoClicker *bool `json:"has_auto_clicker"`
 
 	// tg id
 	// Required: true
 	TgID *int64 `json:"tg_id"`
 
-	// upgrade level
-	// Required: true
-	UpgradeLevel *int64 `json:"upgradeLevel"`
-
 	// upgrade energy
 	// Required: true
 	UpgradeEnergy *int64 `json:"upgrade_energy"`
+
+	// upgrade level
+	// Required: true
+	UpgradeLevel *int64 `json:"upgrade_level"`
 }
 
 // Validate validates this user
@@ -56,11 +56,11 @@ func (m *User) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateUpgradeLevel(formats); err != nil {
+	if err := m.validateUpgradeEnergy(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateUpgradeEnergy(formats); err != nil {
+	if err := m.validateUpgradeLevel(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -72,7 +72,7 @@ func (m *User) Validate(formats strfmt.Registry) error {
 
 func (m *User) validateClickCount(formats strfmt.Registry) error {
 
-	if err := validate.Required("clickCount", "body", m.ClickCount); err != nil {
+	if err := validate.Required("click_count", "body", m.ClickCount); err != nil {
 		return err
 	}
 
@@ -81,7 +81,7 @@ func (m *User) validateClickCount(formats strfmt.Registry) error {
 
 func (m *User) validateHasAutoClicker(formats strfmt.Registry) error {
 
-	if err := validate.Required("hasAutoClicker", "body", m.HasAutoClicker); err != nil {
+	if err := validate.Required("has_auto_clicker", "body", m.HasAutoClicker); err != nil {
 		return err
 	}
 
@@ -97,18 +97,18 @@ func (m *User) validateTgID(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *User) validateUpgradeLevel(formats strfmt.Registry) error {
+func (m *User) validateUpgradeEnergy(formats strfmt.Registry) error {
 
-	if err := validate.Required("upgradeLevel", "body", m.UpgradeLevel); err != nil {
+	if err := validate.Required("upgrade_energy", "body", m.UpgradeEnergy); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (m *User) validateUpgradeEnergy(formats strfmt.Registry) error {
+func (m *User) validateUpgradeLevel(formats strfmt.Registry) error {
 
-	if err := validate.Required("upgrade_energy", "body", m.UpgradeEnergy); err != nil {
+	if err := validate.Required("upgrade_level", "body", m.UpgradeLevel); err != nil {
 		return err
 	}
 

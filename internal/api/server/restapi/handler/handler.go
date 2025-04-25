@@ -21,8 +21,11 @@ import (
 type Handler struct {
 	userUsecase      model.IUserUsecase
 	autoClickerTasks map[int64]context.CancelFunc
-	secretKey        string
-	sendingAccount   string
+	cardUsecase      model.ICardUsecase
+	userCardUsecase  model.IUserCardUsecase
+
+	secretKey      string
+	sendingAccount string
 
 	router http.Handler
 }
@@ -30,6 +33,9 @@ type Handler struct {
 func New(
 	userUsecase model.IUserUsecase,
 	autoClickerTasks map[int64]context.CancelFunc,
+	cardUsecase model.ICardUsecase,
+	userCardUsecase model.IUserCardUsecase,
+
 	secretKey string,
 	sendingAccount string,
 ) *Handler {
@@ -43,8 +49,11 @@ func New(
 	h := &Handler{
 		userUsecase:      userUsecase,
 		autoClickerTasks: autoClickerTasks,
-		secretKey:        secretKey,
-		sendingAccount:   sendingAccount,
+		cardUsecase:      cardUsecase,
+		userCardUsecase:  userCardUsecase,
+
+		secretKey:      secretKey,
+		sendingAccount: sendingAccount,
 	}
 
 	zap.L().Error("server http handler request")

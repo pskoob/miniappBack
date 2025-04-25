@@ -266,20 +266,20 @@ definitions:
     type: object
     required:
       - tg_id
-      - clickCount
-      - upgradeLevel
-      - upgradeEnergy
-      - hasAutoClicker
+      - click_count
+      - upgrade_level
+      - upgrade_energy
+      - has_auto_clicker
     properties:
       tg_id:
         type: integer
-      clickCount:
+      click_count:
         type: integer
-      upgradeLevel:
+      upgrade_level:
         type: integer
-      upgradeEnergy:
+      upgrade_energy:
         type: integer
-      hasAutoClicker:
+      has_auto_clicker:
         type: boolean
 
   Error:
@@ -294,20 +294,20 @@ definitions:
     type: object
     required:
       - tg_id
-      - clickCount
-      - upgradeLevel
+      - click_count
+      - upgrade_level
       - upgrade_energy
-      - hasAutoClicker
+      - has_auto_clicker
     properties:
       tg_id:
         type: integer
       upgrade_energy:
         type: integer
-      upgradeLevel:
+      upgrade_level:
         type: integer
-      clickCount:
+      click_count:
         type: integer
-      hasAutoClicker:
+      has_auto_clicker:
         type: boolean
 
   NearTransit:
