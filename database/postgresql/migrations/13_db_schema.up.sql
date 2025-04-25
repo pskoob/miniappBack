@@ -34,6 +34,17 @@ CREATE TABLE IF NOT EXISTS users_cards
     PRIMARY KEY (user_id, card_id)
 );
 
+CREATE TABLE IF NOT EXISTS cost_cards
+(
+    card_id        BIGINT REFERENCES cards(id) ON DELETE CASCADE,
+    card_name      VARCHAR(100) NOT NULL UNIQUE,
+    base_price     BIGINT NOT NULL default 100,
+    growth_coefficient FLOAT NOT NULL,
+    updated_at     TIMESTAMP WITHOUT TIME ZONE,
+    created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (now() AT TIME ZONE 'utc'),
+    PRIMARY KEY (card_id)
+);
+
 
 COMMIT;
 

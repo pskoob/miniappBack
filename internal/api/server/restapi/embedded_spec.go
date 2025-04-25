@@ -384,9 +384,107 @@ func init() {
           }
         }
       }
+    },
+    "/update_user_card/{tg_id}": {
+      "post": {
+        "tags": [
+          "Cards"
+        ],
+        "summary": "Update User Card",
+        "operationId": "UpdateUserCard",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Card Update Body",
+            "name": "CardUpdateBody",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CardUpdateBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update Card Response",
+            "schema": {
+              "$ref": "#/definitions/CardBody"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
+    "CardBody": {
+      "type": "object",
+      "properties": {
+        "auto_clicker": {
+          "type": "boolean"
+        },
+        "card_id": {
+          "type": "integer"
+        },
+        "card_name": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "integer"
+        },
+        "current_level": {
+          "type": "integer"
+        },
+        "updated_at": {
+          "type": "integer"
+        },
+        "user_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "CardUpdateBody": {
+      "type": "object",
+      "properties": {
+        "card_name": {
+          "type": "string",
+          "enum": [
+            "power_click",
+            "auto_clicker",
+            "energy_booster"
+          ]
+        }
+      }
+    },
     "Error": {
       "type": "object",
       "required": [
@@ -850,9 +948,107 @@ func init() {
           }
         }
       }
+    },
+    "/update_user_card/{tg_id}": {
+      "post": {
+        "tags": [
+          "Cards"
+        ],
+        "summary": "Update User Card",
+        "operationId": "UpdateUserCard",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Card Update Body",
+            "name": "CardUpdateBody",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CardUpdateBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update Card Response",
+            "schema": {
+              "$ref": "#/definitions/CardBody"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
+    "CardBody": {
+      "type": "object",
+      "properties": {
+        "auto_clicker": {
+          "type": "boolean"
+        },
+        "card_id": {
+          "type": "integer"
+        },
+        "card_name": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "integer"
+        },
+        "current_level": {
+          "type": "integer"
+        },
+        "updated_at": {
+          "type": "integer"
+        },
+        "user_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "CardUpdateBody": {
+      "type": "object",
+      "properties": {
+        "card_name": {
+          "type": "string",
+          "enum": [
+            "power_click",
+            "auto_clicker",
+            "energy_booster"
+          ]
+        }
+      }
+    },
     "Error": {
       "type": "object",
       "required": [

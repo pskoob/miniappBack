@@ -63,6 +63,9 @@ func NewMaxonBackAPI(spec *loads.Document) *MaxonBackAPI {
 		TransitNearHandler: TransitNearHandlerFunc(func(params TransitNearParams) middleware.Responder {
 			return middleware.NotImplemented("operation TransitNear has not yet been implemented")
 		}),
+		UpdateUserCardHandler: UpdateUserCardHandlerFunc(func(params UpdateUserCardParams) middleware.Responder {
+			return middleware.NotImplemented("operation UpdateUserCard has not yet been implemented")
+		}),
 	}
 }
 
@@ -113,6 +116,8 @@ type MaxonBackAPI struct {
 	StopEnergyOfflineHandler StopEnergyOfflineHandler
 	// TransitNearHandler sets the operation handler for the transit near operation
 	TransitNearHandler TransitNearHandler
+	// UpdateUserCardHandler sets the operation handler for the update user card operation
+	UpdateUserCardHandler UpdateUserCardHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -210,6 +215,9 @@ func (o *MaxonBackAPI) Validate() error {
 	}
 	if o.TransitNearHandler == nil {
 		unregistered = append(unregistered, "TransitNearHandler")
+	}
+	if o.UpdateUserCardHandler == nil {
+		unregistered = append(unregistered, "UpdateUserCardHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -327,6 +335,10 @@ func (o *MaxonBackAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/near_transaction"] = NewTransitNear(o.context, o.TransitNearHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/update_user_card/{tg_id}"] = NewUpdateUserCard(o.context, o.UpdateUserCardHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

@@ -112,6 +112,6 @@ func (h *Handler) GetUserProgressHandler(req api.GetUserProgressParams) middlewa
 
 	return api.NewGetUserProgressOK().WithPayload(&definition.User{
 		TgID:       &user.TgID.Int64,
-		ClickCount: &user.Balance.Int64,
+		ClickCount: &user.Balance,
 	})
 }

@@ -34,6 +34,9 @@ import (
 	_userCardRepo "github.com/pskoob/miniappBack/domain/user_card/repository/postgresql"
 	_userCardUsecase "github.com/pskoob/miniappBack/domain/user_card/usecase"
 
+	_costCardRepo "github.com/pskoob/miniappBack/domain/cost_card/repository/postgresql"
+	_costCardUsecase "github.com/pskoob/miniappBack/domain/cost_card/usecase"
+
 	_bot "github.com/pskoob/miniappBack/bot"
 )
 
@@ -86,6 +89,9 @@ func main() {
 	userCardRepo := _userCardRepo.New(sqalxConn)
 	userCardUsecase := _userCardUsecase.New(userCardRepo)
 
+	costCardRepo := _costCardRepo.New(sqalxConn)
+	costCUsecase := _costCardUsecase.New(costCardRepo)
+
 	bot, err := _bot.New(userUsecase, userCardUsecase, cardUsecase, cfg.ApiKey)
 	if err != nil {
 		zap.L().Error("error init tg bot", zap.Error(err))
@@ -99,6 +105,7 @@ func main() {
 		autoClickerTasks,
 		cardUsecase,
 		userCardUsecase,
+		costCUsecase,
 
 		cfg.SecretKey,
 		cfg.SendingAccount,

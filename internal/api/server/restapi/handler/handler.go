@@ -23,6 +23,7 @@ type Handler struct {
 	autoClickerTasks map[int64]context.CancelFunc
 	cardUsecase      model.ICardUsecase
 	userCardUsecase  model.IUserCardUsecase
+	costCardUsecase  model.ICostCardUsecase
 
 	secretKey      string
 	sendingAccount string
@@ -35,6 +36,7 @@ func New(
 	autoClickerTasks map[int64]context.CancelFunc,
 	cardUsecase model.ICardUsecase,
 	userCardUsecase model.IUserCardUsecase,
+	costCardUsecase model.ICostCardUsecase,
 
 	secretKey string,
 	sendingAccount string,
@@ -51,6 +53,7 @@ func New(
 		autoClickerTasks: autoClickerTasks,
 		cardUsecase:      cardUsecase,
 		userCardUsecase:  userCardUsecase,
+		costCardUsecase:  costCardUsecase,
 
 		secretKey:      secretKey,
 		sendingAccount: sendingAccount,
@@ -71,6 +74,9 @@ func New(
 
 	// Near
 	router.TransitNearHandler = api.TransitNearHandlerFunc(h.NearTransactionHandler)
+
+	// Update Cards
+	router.UpdateUserCardHandler = api.UpdateUserCardHandlerFunc(h.UpdateUserCardHandler)
 
 	h.router = router.Serve(nil)
 

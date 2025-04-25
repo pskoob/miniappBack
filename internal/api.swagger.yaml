@@ -224,6 +224,46 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /update_user_card/{tg_id}:
+    post:
+      summary: Update User Card
+      operationId: UpdateUserCard
+      tags: 
+        - Cards
+      parameters:
+        - name: tg_id
+          in: path
+          required: true
+          type: integer
+          description: The tg ID of user
+        - name: CardUpdateBody
+          description: Card Update Body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CardUpdateBody'
+      responses:
+        200:
+          description: Update Card Response
+          schema:
+            $ref: '#/definitions/CardBody'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error' 
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: "#/definitions/Error"        
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+
   /near_transaction:
     post:
       summary: Transit Near
@@ -325,3 +365,31 @@ definitions:
         type: number
       token_contract:
         type: string
+
+  CardBody:
+    type: object
+    properties:
+      user_id:
+        type: integer
+      card_id:
+        type: integer
+      card_name:
+        type: string
+      current_level:
+        type: integer
+      auto_clicker:
+        type: boolean
+      updated_at:
+        type: integer
+      created_at:
+        type: integer
+
+  CardUpdateBody:
+    type: object
+    properties:
+      card_name:
+        type: string
+        enum:
+        - power_click
+        - auto_clicker
+        - energy_booster

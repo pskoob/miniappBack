@@ -7,8 +7,10 @@ import (
 )
 
 var (
-	UserDataSaved = "user data was saved"
-	NoSuchUser    = "no such user"
+	UserDataSaved             = "user data was saved"
+	NoSuchUser                = "no such user"
+	BalanceTooLow             = "user balance too low"
+	UserAlreadyHasAutoClicker = "user already has auto clicker"
 
 	StartedAutoClicker = "auto clicker was started"
 	StoppedAutoClicker = "auto clicker was stopped"
@@ -23,7 +25,7 @@ type User struct {
 	TgID      sql.NullInt64  `db:"tg_id"`
 	Username  sql.NullString `db:"username"`
 	Wallet    sql.NullString `db:"wallet"`
-	Balance   sql.NullInt64  `db:"balance"`
+	Balance   int64          `db:"balance"`
 	UpdatedAt sql.NullTime   `db:"updated_at"`
 	CreatedAt time.Time      `db:"created_at"`
 }

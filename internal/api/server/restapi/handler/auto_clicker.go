@@ -93,7 +93,7 @@ func (h *Handler) startAutoClickerForUser(ctx context.Context, user model.User) 
 	defer saveTicker.Stop()                         // Остановка тикера сохранения
 
 	endTime := time.Now().Add(duration) // Время окончания работы автокликера
-	balance := user.Balance.Int64
+	balance := user.Balance
 
 	userCards, err := h.userCardUsecase.GetUserCardsByUserID(ctx, user.ID)
 	if err != nil {
