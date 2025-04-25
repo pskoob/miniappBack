@@ -51,8 +51,17 @@ func NewMaxonBackAPI(spec *loads.Document) *MaxonBackAPI {
 		StartAutoClickerHandler: StartAutoClickerHandlerFunc(func(params StartAutoClickerParams) middleware.Responder {
 			return middleware.NotImplemented("operation StartAutoClicker has not yet been implemented")
 		}),
+		StartEnergyOfflineHandler: StartEnergyOfflineHandlerFunc(func(params StartEnergyOfflineParams) middleware.Responder {
+			return middleware.NotImplemented("operation StartEnergyOffline has not yet been implemented")
+		}),
 		StopAutoClickerHandler: StopAutoClickerHandlerFunc(func(params StopAutoClickerParams) middleware.Responder {
 			return middleware.NotImplemented("operation StopAutoClicker has not yet been implemented")
+		}),
+		StopEnergyOfflineHandler: StopEnergyOfflineHandlerFunc(func(params StopEnergyOfflineParams) middleware.Responder {
+			return middleware.NotImplemented("operation StopEnergyOffline has not yet been implemented")
+		}),
+		TransitNearHandler: TransitNearHandlerFunc(func(params TransitNearParams) middleware.Responder {
+			return middleware.NotImplemented("operation TransitNear has not yet been implemented")
 		}),
 	}
 }
@@ -96,8 +105,14 @@ type MaxonBackAPI struct {
 	SaveProgressHandler SaveProgressHandler
 	// StartAutoClickerHandler sets the operation handler for the start auto clicker operation
 	StartAutoClickerHandler StartAutoClickerHandler
+	// StartEnergyOfflineHandler sets the operation handler for the start energy offline operation
+	StartEnergyOfflineHandler StartEnergyOfflineHandler
 	// StopAutoClickerHandler sets the operation handler for the stop auto clicker operation
 	StopAutoClickerHandler StopAutoClickerHandler
+	// StopEnergyOfflineHandler sets the operation handler for the stop energy offline operation
+	StopEnergyOfflineHandler StopEnergyOfflineHandler
+	// TransitNearHandler sets the operation handler for the transit near operation
+	TransitNearHandler TransitNearHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -184,8 +199,17 @@ func (o *MaxonBackAPI) Validate() error {
 	if o.StartAutoClickerHandler == nil {
 		unregistered = append(unregistered, "StartAutoClickerHandler")
 	}
+	if o.StartEnergyOfflineHandler == nil {
+		unregistered = append(unregistered, "StartEnergyOfflineHandler")
+	}
 	if o.StopAutoClickerHandler == nil {
 		unregistered = append(unregistered, "StopAutoClickerHandler")
+	}
+	if o.StopEnergyOfflineHandler == nil {
+		unregistered = append(unregistered, "StopEnergyOfflineHandler")
+	}
+	if o.TransitNearHandler == nil {
+		unregistered = append(unregistered, "TransitNearHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -290,7 +314,19 @@ func (o *MaxonBackAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
+	o.handlers["POST"]["/start_energy_collect/{tg_id}"] = NewStartEnergyOffline(o.context, o.StartEnergyOfflineHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
 	o.handlers["POST"]["/stop_auto_clicker/{tg_id}"] = NewStopAutoClicker(o.context, o.StopAutoClickerHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/stop_energy_collect/{tg_id}"] = NewStopEnergyOffline(o.context, o.StopEnergyOfflineHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/near_transaction"] = NewTransitNear(o.context, o.TransitNearHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

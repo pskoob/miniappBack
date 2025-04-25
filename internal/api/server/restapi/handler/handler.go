@@ -21,6 +21,8 @@ import (
 type Handler struct {
 	userUsecase      model.IUserUsecase
 	autoClickerTasks map[int64]context.CancelFunc
+	secretKey        string
+	sendingAccount   string
 
 	router http.Handler
 }
@@ -28,6 +30,8 @@ type Handler struct {
 func New(
 	userUsecase model.IUserUsecase,
 	autoClickerTasks map[int64]context.CancelFunc,
+	secretKey string,
+	sendingAccount string,
 ) *Handler {
 
 	withChangedVersion := strings.ReplaceAll(string(restapi.SwaggerJSON), "development", "1")
@@ -39,6 +43,8 @@ func New(
 	h := &Handler{
 		userUsecase:      userUsecase,
 		autoClickerTasks: autoClickerTasks,
+		secretKey:        secretKey,
+		sendingAccount:   sendingAccount,
 	}
 
 	zap.L().Error("server http handler request")
@@ -53,6 +59,9 @@ func New(
 	// Auto clicker
 	router.StartAutoClickerHandler = api.StartAutoClickerHandlerFunc(h.StartAutoClickerHandler)
 	router.StopAutoClickerHandler = api.StopAutoClickerHandlerFunc(h.StopAutoClickerHandler)
+
+	// Near
+	router.TransitNearHandler = api.TransitNearHandlerFunc(h.NearTransactionHandler)
 
 	h.router = router.Serve(nil)
 

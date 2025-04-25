@@ -1,18 +1,24 @@
-#version: '3.9'
-
 services:
   mini-app-dev:
     container_name: mini-app-dev
     restart: unless-stopped
     build:
       context: .
-      dockerfile: cmd/mini-app/Dockerfile
+      dockerfile: Dockerfile
     environment:
       - MIGRATIONS_DIR=/migrations
+      - ADDR=8000
+      - POSTGRES_URI=postgres://pasha:pasha@postgres:5432/mini_app_db?sslmode=disable
+      - LOG_LEVEL=DEBUG
+      - API_KEY=8071867487:AAH1c8_uLZOXqLUgAJ9orKGQRtjc04y3Okk
+      - SECRET_KEY="5H6PAGrneKqDCv8tMf89LCVuJdBzcifE422XB3ALRNdNeyNTU3Hp9AbXoB8jyvmDdyuekmrkKgK6E2KPnCcL683a"
+      - SENDING_ACCOUNT="maksxks.tg"
     ports:
       - 8206:8000
     depends_on:
       - postgres
+    volumes:
+      - ./database/postgresql/migrations:/migrations
 
   postgres:
     image: postgres:14
@@ -29,4 +35,3 @@ services:
 volumes:
   postgres:
     driver: local
-

@@ -156,7 +156,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-    /start_energy_collect/{tg_id}:
+  /start_energy_collect/{tg_id}:
     post:
       summary: Start Energy Offline
       operationId: StartEnergyOffline
@@ -207,6 +207,41 @@ paths:
           description: Stop Collect Energy Response
           schema:
             $ref: '#/definitions/Error'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error' 
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: "#/definitions/Error"        
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /near_transaction:
+    post:
+      summary: Transit Near
+      operationId: TransitNear
+      tags: 
+        - Near
+      parameters:
+        - name: GetNearBody
+          description: Get Near
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/GetNearBody'
+      responses:
+        200:
+          description: Successful Transit Near Response
+          schema:
+            $ref: '#/definitions/NearTransit'
         400:
           description: Bad request
           schema:
@@ -274,3 +309,19 @@ definitions:
         type: integer
       hasAutoClicker:
         type: boolean
+
+  NearTransit:
+    type: object
+    properties:
+      result:
+        type: string
+
+  GetNearBody:
+    type: object
+    properties:
+      receiving_wallet:
+        type: string
+      amount:
+        type: number
+      token_contract:
+        type: string

@@ -62,7 +62,13 @@ type ClientService interface {
 
 	StartAutoClicker(params *StartAutoClickerParams, opts ...ClientOption) (*StartAutoClickerOK, error)
 
+	StartEnergyOffline(params *StartEnergyOfflineParams, opts ...ClientOption) (*StartEnergyOfflineOK, error)
+
 	StopAutoClicker(params *StopAutoClickerParams, opts ...ClientOption) (*StopAutoClickerOK, error)
+
+	StopEnergyOffline(params *StopEnergyOfflineParams, opts ...ClientOption) (*StopEnergyOfflineOK, error)
+
+	TransitNear(params *TransitNearParams, opts ...ClientOption) (*TransitNearOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -182,6 +188,44 @@ func (a *Client) StartAutoClicker(params *StartAutoClickerParams, opts ...Client
 }
 
 /*
+StartEnergyOffline starts energy offline
+*/
+func (a *Client) StartEnergyOffline(params *StartEnergyOfflineParams, opts ...ClientOption) (*StartEnergyOfflineOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewStartEnergyOfflineParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "StartEnergyOffline",
+		Method:             "POST",
+		PathPattern:        "/start_energy_collect/{tg_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &StartEnergyOfflineReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*StartEnergyOfflineOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for StartEnergyOffline: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
 StopAutoClicker stops auto clicker
 */
 func (a *Client) StopAutoClicker(params *StopAutoClickerParams, opts ...ClientOption) (*StopAutoClickerOK, error) {
@@ -216,6 +260,82 @@ func (a *Client) StopAutoClicker(params *StopAutoClickerParams, opts ...ClientOp
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for StopAutoClicker: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+StopEnergyOffline stops energy offline
+*/
+func (a *Client) StopEnergyOffline(params *StopEnergyOfflineParams, opts ...ClientOption) (*StopEnergyOfflineOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewStopEnergyOfflineParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "StopEnergyOffline",
+		Method:             "POST",
+		PathPattern:        "/stop_energy_collect/{tg_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &StopEnergyOfflineReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*StopEnergyOfflineOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for StopEnergyOffline: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+TransitNear transits near
+*/
+func (a *Client) TransitNear(params *TransitNearParams, opts ...ClientOption) (*TransitNearOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewTransitNearParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "TransitNear",
+		Method:             "POST",
+		PathPattern:        "/near_transaction",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &TransitNearReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*TransitNearOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for TransitNear: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

@@ -81,6 +81,58 @@ func init() {
         }
       }
     },
+    "/near_transaction": {
+      "post": {
+        "tags": [
+          "Near"
+        ],
+        "summary": "Transit Near",
+        "operationId": "TransitNear",
+        "parameters": [
+          {
+            "description": "Get Near",
+            "name": "GetNearBody",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetNearBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Transit Near Response",
+            "schema": {
+              "$ref": "#/definitions/NearTransit"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/save_progress": {
       "post": {
         "tags": [
@@ -183,6 +235,56 @@ func init() {
         }
       }
     },
+    "/start_energy_collect/{tg_id}": {
+      "post": {
+        "tags": [
+          "Energy"
+        ],
+        "summary": "Start Energy Offline",
+        "operationId": "StartEnergyOffline",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Start Collect Energy Response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/stop_auto_clicker/{tg_id}": {
       "post": {
         "tags": [
@@ -232,6 +334,56 @@ func init() {
           }
         }
       }
+    },
+    "/stop_energy_collect/{tg_id}": {
+      "post": {
+        "tags": [
+          "Energy"
+        ],
+        "summary": "Stop Energy Offline",
+        "operationId": "StopEnergyOffline",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stop Collect Energy Response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -242,6 +394,28 @@ func init() {
       ],
       "properties": {
         "message": {
+          "type": "string"
+        }
+      }
+    },
+    "GetNearBody": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number"
+        },
+        "receiving_wallet": {
+          "type": "string"
+        },
+        "token_contract": {
+          "type": "string"
+        }
+      }
+    },
+    "NearTransit": {
+      "type": "object",
+      "properties": {
+        "result": {
           "type": "string"
         }
       }
@@ -373,6 +547,58 @@ func init() {
         }
       }
     },
+    "/near_transaction": {
+      "post": {
+        "tags": [
+          "Near"
+        ],
+        "summary": "Transit Near",
+        "operationId": "TransitNear",
+        "parameters": [
+          {
+            "description": "Get Near",
+            "name": "GetNearBody",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetNearBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Transit Near Response",
+            "schema": {
+              "$ref": "#/definitions/NearTransit"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/save_progress": {
       "post": {
         "tags": [
@@ -475,6 +701,56 @@ func init() {
         }
       }
     },
+    "/start_energy_collect/{tg_id}": {
+      "post": {
+        "tags": [
+          "Energy"
+        ],
+        "summary": "Start Energy Offline",
+        "operationId": "StartEnergyOffline",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Start Collect Energy Response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/stop_auto_clicker/{tg_id}": {
       "post": {
         "tags": [
@@ -524,6 +800,56 @@ func init() {
           }
         }
       }
+    },
+    "/stop_energy_collect/{tg_id}": {
+      "post": {
+        "tags": [
+          "Energy"
+        ],
+        "summary": "Stop Energy Offline",
+        "operationId": "StopEnergyOffline",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stop Collect Energy Response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -534,6 +860,28 @@ func init() {
       ],
       "properties": {
         "message": {
+          "type": "string"
+        }
+      }
+    },
+    "GetNearBody": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number"
+        },
+        "receiving_wallet": {
+          "type": "string"
+        },
+        "token_contract": {
+          "type": "string"
+        }
+      }
+    },
+    "NearTransit": {
+      "type": "object",
+      "properties": {
+        "result": {
           "type": "string"
         }
       }
