@@ -42,7 +42,7 @@ func (o *GetUserProgressURL) SetBasePath(bp string) {
 func (o *GetUserProgressURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/get_user_progress/{tg_id}"
+	var _path = "/get_user/{tg_id}"
 
 	tgID := swag.FormatInt64(o.TgID)
 	if tgID != "" {

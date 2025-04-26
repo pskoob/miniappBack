@@ -86,7 +86,7 @@ func (a *Client) GetUserProgress(params *GetUserProgressParams, opts ...ClientOp
 	op := &runtime.ClientOperation{
 		ID:                 "GetUserProgress",
 		Method:             "GET",
-		PathPattern:        "/get_user_progress/{tg_id}",
+		PathPattern:        "/get_user/{tg_id}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
@@ -124,7 +124,7 @@ func (a *Client) SaveProgress(params *SaveProgressParams, opts ...ClientOption) 
 	op := &runtime.ClientOperation{
 		ID:                 "SaveProgress",
 		Method:             "POST",
-		PathPattern:        "/save_progress",
+		PathPattern:        "/save_progress/{tg_id}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},

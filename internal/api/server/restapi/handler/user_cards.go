@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"math"
 	"time"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -34,7 +35,6 @@ func (h *Handler) UpdateUserCardHandler(req api.UpdateUserCardParams) middleware
 
 	for i := range userCards {
 		if req.CardUpdateBody.CardName == model.AutoClicker && userCards[i].AutoClicker.Bool {
-			fmt.Println("2", err)
 			return api.NewUpdateUserCardBadRequest().WithPayload(&definition.Error{
 				Message: &model.UserAlreadyHasAutoClicker,
 			})
@@ -44,21 +44,33 @@ func (h *Handler) UpdateUserCardHandler(req api.UpdateUserCardParams) middleware
 			costCard, err := h.costCardUsecase.GetCostCardByCardID(ctx, userCards[i].CardID)
 			if err != nil {
 				zap.L().Error("error get card cost", zap.Error(err))
-				fmt.Println(err)
 				return api.NewUpdateUserCardInternalServerError()
 			}
 
-			updatePrice := float64(costCard.BasePrice) * costCard.GrowthCoefficient * float64(userCards[i].CurrentLevel)
+			card, err := h.cardUsecase.GetCardByID(ctx, userCards[i].CardID)
+			if err != nil {
+				zap.L().Error("error get card", zap.Error(err))
+				return api.NewUpdateUserCardInternalServerError()
+			}
+
+			if userCards[i].CurrentLevel == card.MaxLevel.Int64 {
+				return api.NewUpdateUserCardBadRequest().WithPayload(&definition.Error{
+					Message: &model.CardHasMaxLvl,
+				})
+			}
+
+			updatePrice := float64(costCard.BasePrice) * math.Pow(2, float64(userCards[i].CurrentLevel))
+			if userCards[i].CurrentLevel == 0 {
+				updatePrice = float64(costCard.BasePrice)
+			}
+
 			if user.Balance < int64(updatePrice) {
 				return api.NewUpdateUserCardBadRequest().WithPayload(&definition.Error{
 					Message: &model.BalanceTooLow,
 				})
 			}
-			fmt.Println("int: ", int64(updatePrice), "float: ", updatePrice)
 
-			if userCards[i].CurrentLevel == 0 {
-				updatePrice = float64(costCard.BasePrice)
-			}
+			fmt.Println("int: ", int64(updatePrice), "float: ", updatePrice)
 
 			newUserBalance := user.Balance - int64(updatePrice)
 			fmt.Println("new: ", newUserBalance, "old: ", user.Balance)

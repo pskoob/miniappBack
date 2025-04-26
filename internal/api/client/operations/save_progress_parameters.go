@@ -14,6 +14,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 
 	models "github.com/pskoob/miniappBack/internal/api/definition"
 )
@@ -63,11 +64,17 @@ SaveProgressParams contains all the parameters to send to the API endpoint
 */
 type SaveProgressParams struct {
 
-	/* Progress.
+	/* TapTokenBody.
 
-	   Save progress body
+	   Tap Token Body
 	*/
-	Progress *models.Progress
+	TapTokenBody *models.TapTokenBody
+
+	/* TgID.
+
+	   The tg ID of user
+	*/
+	TgID int64
 
 	timeout    time.Duration
 	Context    context.Context
@@ -122,15 +129,26 @@ func (o *SaveProgressParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithProgress adds the progress to the save progress params
-func (o *SaveProgressParams) WithProgress(progress *models.Progress) *SaveProgressParams {
-	o.SetProgress(progress)
+// WithTapTokenBody adds the tapTokenBody to the save progress params
+func (o *SaveProgressParams) WithTapTokenBody(tapTokenBody *models.TapTokenBody) *SaveProgressParams {
+	o.SetTapTokenBody(tapTokenBody)
 	return o
 }
 
-// SetProgress adds the progress to the save progress params
-func (o *SaveProgressParams) SetProgress(progress *models.Progress) {
-	o.Progress = progress
+// SetTapTokenBody adds the tapTokenBody to the save progress params
+func (o *SaveProgressParams) SetTapTokenBody(tapTokenBody *models.TapTokenBody) {
+	o.TapTokenBody = tapTokenBody
+}
+
+// WithTgID adds the tgID to the save progress params
+func (o *SaveProgressParams) WithTgID(tgID int64) *SaveProgressParams {
+	o.SetTgID(tgID)
+	return o
+}
+
+// SetTgID adds the tgId to the save progress params
+func (o *SaveProgressParams) SetTgID(tgID int64) {
+	o.TgID = tgID
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -140,10 +158,15 @@ func (o *SaveProgressParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 		return err
 	}
 	var res []error
-	if o.Progress != nil {
-		if err := r.SetBodyParam(o.Progress); err != nil {
+	if o.TapTokenBody != nil {
+		if err := r.SetBodyParam(o.TapTokenBody); err != nil {
 			return err
 		}
+	}
+
+	// path param tg_id
+	if err := r.SetPathParam("tg_id", swag.FormatInt64(o.TgID)); err != nil {
+		return err
 	}
 
 	if len(res) > 0 {

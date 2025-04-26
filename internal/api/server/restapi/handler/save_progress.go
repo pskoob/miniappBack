@@ -1,14 +1,15 @@
 package handler
 
 import (
-	"database/sql"
 	"fmt"
-	"time"
+	"strconv"
 
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/pskoob/miniappBack/internal/api/definition"
 	"github.com/pskoob/miniappBack/internal/api/server/restapi/api"
 	"github.com/pskoob/miniappBack/model"
+	"github.com/pskoob/miniappBack/pkg/jsonwebtoken"
+	"github.com/pskoob/miniappBack/pkg/useful"
 	"go.uber.org/zap"
 )
 
@@ -17,8 +18,7 @@ func (h *Handler) SaveUserProgressHandler(req api.SaveProgressParams) middleware
 
 	ctx := req.HTTPRequest.Context()
 
-	fmt.Println("1")
-	user, err := h.userUsecase.GetUserByTgID(ctx, *req.Progress.TgID)
+	user, err := h.userUsecase.GetUserByTgID(ctx, req.TgID)
 	if err != nil {
 		zap.L().Error("no such user", zap.Error(err))
 		return api.NewSaveProgressBadRequest().WithPayload(&definition.Error{
@@ -26,80 +26,32 @@ func (h *Handler) SaveUserProgressHandler(req api.SaveProgressParams) middleware
 		})
 	}
 
-	fmt.Println("2")
-
-	userCards, err := h.userCardUsecase.GetUserCardsByUserID(ctx, user.ID)
+	clickCount, updatedAt, err := jsonwebtoken.ParseToken(*req.TapTokenBody.TapToken, h.tokenSecretKey)
 	if err != nil {
-		zap.L().Error("no such user", zap.Error(err))
-		return api.NewSaveProgressBadRequest().WithPayload(&definition.Error{
-			Message: &model.NoSuchUser,
-		})
+		zap.L().Error(fmt.Sprintf("error parse token, userID: %d", user.ID), zap.Error(err))
+		return api.NewSaveProgressBadRequest()
 	}
 
-	fmt.Println("3")
-
-	for i := range userCards {
-		if userCards[i].CardName == model.AutoClicker && !userCards[i].AutoClicker.Bool {
-			autoClickerUserCard := model.UserCard{
-				UserID:      userCards[i].UserID,
-				CardID:      userCards[i].CardID,
-				CardName:    userCards[i].CardName,
-				AutoClicker: sql.NullBool{Bool: true, Valid: true},
-			}
-			err := h.userCardUsecase.UpdateUserCardByUserID(ctx, autoClickerUserCard)
-			if err != nil {
-				zap.L().Error("error update autor clicker user card", zap.Error(err))
-				return api.NewSaveProgressInternalServerError()
-			}
-		}
-		fmt.Println("4")
-
-		if userCards[i].CardName == model.EnergyBooster {
-			energyBoosterUserCard := model.UserCard{
-				UserID:       userCards[i].UserID,
-				CardID:       userCards[i].CardID,
-				CardName:     userCards[i].CardName,
-				CurrentLevel: *req.Progress.UpgradeEnergy,
-				UpdatedAt:    sql.NullTime{Time: time.Now(), Valid: true},
-			}
-			err := h.userCardUsecase.UpdateUserCardByUserID(ctx, energyBoosterUserCard)
-			if err != nil {
-				zap.L().Error("error update energy booster user card", zap.Error(err))
-				return api.NewSaveProgressInternalServerError()
-			}
-		}
-		fmt.Println("5")
-
-		if userCards[i].CardName == model.PowerClick {
-			powerClickUserCard := model.UserCard{
-				UserID:       userCards[i].UserID,
-				CardID:       userCards[i].CardID,
-				CardName:     userCards[i].CardName,
-				CurrentLevel: *req.Progress.UpgradeLevel,
-				UpdatedAt:    sql.NullTime{Time: time.Now(), Valid: true},
-			}
-			err := h.userCardUsecase.UpdateUserCardByUserID(ctx, powerClickUserCard)
-			if err != nil {
-				zap.L().Error("error update power click user card", zap.Error(err))
-				return api.NewSaveProgressInternalServerError()
-			}
-		}
-		fmt.Println("6")
+	if user.UpdatedAt.Time.Unix() >= updatedAt {
+		zap.L().Error("token was expired", zap.Error(err))
+		return api.NewSaveProgressBadRequest()
 	}
 
-	fmt.Println("7")
+	balance := clickCount + user.Balance
 
-	err = h.userUsecase.UpdateUserBalance(ctx, user.TgID.Int64, *req.Progress.ClickCount)
+	err = h.userUsecase.UpdateUserBalance(ctx, user.TgID.Int64, balance)
 	if err != nil {
 		zap.L().Error("error update user balance", zap.Error(err))
 		return api.NewSaveProgressInternalServerError()
 	}
+
 	return api.NewSaveProgressOK().WithPayload(&definition.Error{
-		Message: &model.UserDataSaved,
+		Message: useful.StrPtr(strconv.Itoa(int(balance))),
 	})
+
 }
 
-func (h *Handler) GetUserProgressHandler(req api.GetUserProgressParams) middleware.Responder {
+func (h *Handler) GetUserHandler(req api.GetUserProgressParams) middleware.Responder {
 	zap.L().Info("get user progress request")
 
 	ctx := req.HTTPRequest.Context()
@@ -111,7 +63,9 @@ func (h *Handler) GetUserProgressHandler(req api.GetUserProgressParams) middlewa
 	}
 
 	return api.NewGetUserProgressOK().WithPayload(&definition.User{
-		TgID:       &user.TgID.Int64,
-		ClickCount: &user.Balance,
+		TgID:     &user.TgID.Int64,
+		Balance:  &user.Balance,
+		Wallet:   &user.Wallet.String,
+		Username: &user.Username.String,
 	})
 }

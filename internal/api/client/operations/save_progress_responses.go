@@ -55,7 +55,7 @@ func (o *SaveProgressReader) ReadResponse(response runtime.ClientResponse, consu
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[POST /save_progress] SaveProgress", response, response.Code())
+		return nil, runtime.NewAPIError("[POST /save_progress/{tg_id}] SaveProgress", response, response.Code())
 	}
 }
 
@@ -105,12 +105,12 @@ func (o *SaveProgressOK) Code() int {
 
 func (o *SaveProgressOK) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /save_progress][%d] saveProgressOK %s", 200, payload)
+	return fmt.Sprintf("[POST /save_progress/{tg_id}][%d] saveProgressOK %s", 200, payload)
 }
 
 func (o *SaveProgressOK) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /save_progress][%d] saveProgressOK %s", 200, payload)
+	return fmt.Sprintf("[POST /save_progress/{tg_id}][%d] saveProgressOK %s", 200, payload)
 }
 
 func (o *SaveProgressOK) GetPayload() *models.Error {
@@ -175,12 +175,12 @@ func (o *SaveProgressBadRequest) Code() int {
 
 func (o *SaveProgressBadRequest) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /save_progress][%d] saveProgressBadRequest %s", 400, payload)
+	return fmt.Sprintf("[POST /save_progress/{tg_id}][%d] saveProgressBadRequest %s", 400, payload)
 }
 
 func (o *SaveProgressBadRequest) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /save_progress][%d] saveProgressBadRequest %s", 400, payload)
+	return fmt.Sprintf("[POST /save_progress/{tg_id}][%d] saveProgressBadRequest %s", 400, payload)
 }
 
 func (o *SaveProgressBadRequest) GetPayload() *models.Error {
@@ -245,12 +245,12 @@ func (o *SaveProgressForbidden) Code() int {
 
 func (o *SaveProgressForbidden) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /save_progress][%d] saveProgressForbidden %s", 403, payload)
+	return fmt.Sprintf("[POST /save_progress/{tg_id}][%d] saveProgressForbidden %s", 403, payload)
 }
 
 func (o *SaveProgressForbidden) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /save_progress][%d] saveProgressForbidden %s", 403, payload)
+	return fmt.Sprintf("[POST /save_progress/{tg_id}][%d] saveProgressForbidden %s", 403, payload)
 }
 
 func (o *SaveProgressForbidden) GetPayload() *models.Error {
@@ -315,12 +315,12 @@ func (o *SaveProgressUnprocessableEntity) Code() int {
 
 func (o *SaveProgressUnprocessableEntity) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /save_progress][%d] saveProgressUnprocessableEntity %s", 422, payload)
+	return fmt.Sprintf("[POST /save_progress/{tg_id}][%d] saveProgressUnprocessableEntity %s", 422, payload)
 }
 
 func (o *SaveProgressUnprocessableEntity) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /save_progress][%d] saveProgressUnprocessableEntity %s", 422, payload)
+	return fmt.Sprintf("[POST /save_progress/{tg_id}][%d] saveProgressUnprocessableEntity %s", 422, payload)
 }
 
 func (o *SaveProgressUnprocessableEntity) GetPayload() *models.Error {
@@ -385,12 +385,12 @@ func (o *SaveProgressInternalServerError) Code() int {
 
 func (o *SaveProgressInternalServerError) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /save_progress][%d] saveProgressInternalServerError %s", 500, payload)
+	return fmt.Sprintf("[POST /save_progress/{tg_id}][%d] saveProgressInternalServerError %s", 500, payload)
 }
 
 func (o *SaveProgressInternalServerError) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /save_progress][%d] saveProgressInternalServerError %s", 500, payload)
+	return fmt.Sprintf("[POST /save_progress/{tg_id}][%d] saveProgressInternalServerError %s", 500, payload)
 }
 
 func (o *SaveProgressInternalServerError) GetPayload() *models.Error {

@@ -27,6 +27,7 @@ type Handler struct {
 
 	secretKey      string
 	sendingAccount string
+	tokenSecretKey string
 
 	router http.Handler
 }
@@ -40,6 +41,7 @@ func New(
 
 	secretKey string,
 	sendingAccount string,
+	tokenSecretKey string,
 ) *Handler {
 
 	withChangedVersion := strings.ReplaceAll(string(restapi.SwaggerJSON), "development", "1")
@@ -57,6 +59,7 @@ func New(
 
 		secretKey:      secretKey,
 		sendingAccount: sendingAccount,
+		tokenSecretKey: tokenSecretKey,
 	}
 
 	zap.L().Error("server http handler request")
@@ -65,7 +68,7 @@ func New(
 	router.Logger = zap.S().Infof
 
 	// Progress
-	router.GetUserProgressHandler = api.GetUserProgressHandlerFunc(h.GetUserProgressHandler)
+	router.GetUserProgressHandler = api.GetUserProgressHandlerFunc(h.GetUserHandler)
 	router.SaveProgressHandler = api.SaveProgressHandlerFunc(h.SaveUserProgressHandler)
 
 	// Auto clicker

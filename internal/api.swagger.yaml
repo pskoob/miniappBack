@@ -19,19 +19,24 @@ produces:
 
 paths:
 
-  /save_progress:
+  /save_progress/{tg_id}:
     post:
       summary: Save Progress
       operationId: SaveProgress
       tags: 
         - Progress
       parameters:
-        - name: Progress
-          description: Save progress body
+        - name: tg_id
+          in: path
+          required: true
+          type: integer
+          description: The tg ID of user
+        - name: TapTokenBody
+          description: Tap Token Body
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Progress'
+            $ref: '#/definitions/TapTokenBody'
       responses:
         200:
           description: Save Progress Response
@@ -54,7 +59,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /get_user_progress/{tg_id}:
+  /get_user/{tg_id}:
     get:
       summary: Get User Progress
       operationId: GetUserProgress
@@ -302,26 +307,6 @@ paths:
 
 definitions:
 
-  Progress:
-    type: object
-    required:
-      - tg_id
-      - click_count
-      - upgrade_level
-      - upgrade_energy
-      - has_auto_clicker
-    properties:
-      tg_id:
-        type: integer
-      click_count:
-        type: integer
-      upgrade_level:
-        type: integer
-      upgrade_energy:
-        type: integer
-      has_auto_clicker:
-        type: boolean
-
   Error:
     type: object
     required:
@@ -334,21 +319,20 @@ definitions:
     type: object
     required:
       - tg_id
-      - click_count
-      - upgrade_level
-      - upgrade_energy
-      - has_auto_clicker
+      - balance
+      - wallet
+      - username
     properties:
       tg_id:
         type: integer
-      upgrade_energy:
+      balance:
         type: integer
       upgrade_level:
         type: integer
-      click_count:
-        type: integer
-      has_auto_clicker:
-        type: boolean
+      wallet:
+        type: string
+      username:
+        type: string
 
   NearTransit:
     type: object
@@ -393,3 +377,11 @@ definitions:
         - power_click
         - auto_clicker
         - energy_booster
+
+  TapTokenBody:
+    type: object
+    required:
+      - tap_token
+    properties:
+      tap_token:
+        type: string

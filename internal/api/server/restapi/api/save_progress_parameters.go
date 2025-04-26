@@ -12,6 +12,8 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
 	models "github.com/pskoob/miniappBack/internal/api/definition"
@@ -34,11 +36,16 @@ type SaveProgressParams struct {
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
-	/*Save progress body
+	/*Tap Token Body
 	  Required: true
 	  In: body
 	*/
-	Progress *models.Progress
+	TapTokenBody *models.TapTokenBody
+	/*The tg ID of user
+	  Required: true
+	  In: path
+	*/
+	TgID int64
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -52,12 +59,12 @@ func (o *SaveProgressParams) BindRequest(r *http.Request, route *middleware.Matc
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.Progress
+		var body models.TapTokenBody
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
-				res = append(res, errors.Required("progress", "body", ""))
+				res = append(res, errors.Required("tapTokenBody", "body", ""))
 			} else {
-				res = append(res, errors.NewParseError("progress", "body", "", err))
+				res = append(res, errors.NewParseError("tapTokenBody", "body", "", err))
 			}
 		} else {
 			// validate body object
@@ -71,14 +78,38 @@ func (o *SaveProgressParams) BindRequest(r *http.Request, route *middleware.Matc
 			}
 
 			if len(res) == 0 {
-				o.Progress = &body
+				o.TapTokenBody = &body
 			}
 		}
 	} else {
-		res = append(res, errors.Required("progress", "body", ""))
+		res = append(res, errors.Required("tapTokenBody", "body", ""))
+	}
+
+	rTgID, rhkTgID, _ := route.Params.GetOK("tg_id")
+	if err := o.bindTgID(rTgID, rhkTgID, route.Formats); err != nil {
+		res = append(res, err)
 	}
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// bindTgID binds and validates parameter TgID from path.
+func (o *SaveProgressParams) bindTgID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: true
+	// Parameter is provided by construction from the route
+
+	value, err := swag.ConvertInt64(raw)
+	if err != nil {
+		return errors.InvalidType("tg_id", "path", "int64", raw)
+	}
+	o.TgID = value
+
 	return nil
 }

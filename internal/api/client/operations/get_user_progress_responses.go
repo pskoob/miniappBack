@@ -55,7 +55,7 @@ func (o *GetUserProgressReader) ReadResponse(response runtime.ClientResponse, co
 		}
 		return nil, result
 	default:
-		return nil, runtime.NewAPIError("[GET /get_user_progress/{tg_id}] GetUserProgress", response, response.Code())
+		return nil, runtime.NewAPIError("[GET /get_user/{tg_id}] GetUserProgress", response, response.Code())
 	}
 }
 
@@ -105,12 +105,12 @@ func (o *GetUserProgressOK) Code() int {
 
 func (o *GetUserProgressOK) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /get_user_progress/{tg_id}][%d] getUserProgressOK %s", 200, payload)
+	return fmt.Sprintf("[GET /get_user/{tg_id}][%d] getUserProgressOK %s", 200, payload)
 }
 
 func (o *GetUserProgressOK) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /get_user_progress/{tg_id}][%d] getUserProgressOK %s", 200, payload)
+	return fmt.Sprintf("[GET /get_user/{tg_id}][%d] getUserProgressOK %s", 200, payload)
 }
 
 func (o *GetUserProgressOK) GetPayload() *models.User {
@@ -175,12 +175,12 @@ func (o *GetUserProgressBadRequest) Code() int {
 
 func (o *GetUserProgressBadRequest) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /get_user_progress/{tg_id}][%d] getUserProgressBadRequest %s", 400, payload)
+	return fmt.Sprintf("[GET /get_user/{tg_id}][%d] getUserProgressBadRequest %s", 400, payload)
 }
 
 func (o *GetUserProgressBadRequest) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /get_user_progress/{tg_id}][%d] getUserProgressBadRequest %s", 400, payload)
+	return fmt.Sprintf("[GET /get_user/{tg_id}][%d] getUserProgressBadRequest %s", 400, payload)
 }
 
 func (o *GetUserProgressBadRequest) GetPayload() *models.Error {
@@ -245,12 +245,12 @@ func (o *GetUserProgressForbidden) Code() int {
 
 func (o *GetUserProgressForbidden) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /get_user_progress/{tg_id}][%d] getUserProgressForbidden %s", 403, payload)
+	return fmt.Sprintf("[GET /get_user/{tg_id}][%d] getUserProgressForbidden %s", 403, payload)
 }
 
 func (o *GetUserProgressForbidden) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /get_user_progress/{tg_id}][%d] getUserProgressForbidden %s", 403, payload)
+	return fmt.Sprintf("[GET /get_user/{tg_id}][%d] getUserProgressForbidden %s", 403, payload)
 }
 
 func (o *GetUserProgressForbidden) GetPayload() *models.Error {
@@ -315,12 +315,12 @@ func (o *GetUserProgressUnprocessableEntity) Code() int {
 
 func (o *GetUserProgressUnprocessableEntity) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /get_user_progress/{tg_id}][%d] getUserProgressUnprocessableEntity %s", 422, payload)
+	return fmt.Sprintf("[GET /get_user/{tg_id}][%d] getUserProgressUnprocessableEntity %s", 422, payload)
 }
 
 func (o *GetUserProgressUnprocessableEntity) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /get_user_progress/{tg_id}][%d] getUserProgressUnprocessableEntity %s", 422, payload)
+	return fmt.Sprintf("[GET /get_user/{tg_id}][%d] getUserProgressUnprocessableEntity %s", 422, payload)
 }
 
 func (o *GetUserProgressUnprocessableEntity) GetPayload() *models.Error {
@@ -385,12 +385,12 @@ func (o *GetUserProgressInternalServerError) Code() int {
 
 func (o *GetUserProgressInternalServerError) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /get_user_progress/{tg_id}][%d] getUserProgressInternalServerError %s", 500, payload)
+	return fmt.Sprintf("[GET /get_user/{tg_id}][%d] getUserProgressInternalServerError %s", 500, payload)
 }
 
 func (o *GetUserProgressInternalServerError) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /get_user_progress/{tg_id}][%d] getUserProgressInternalServerError %s", 500, payload)
+	return fmt.Sprintf("[GET /get_user/{tg_id}][%d] getUserProgressInternalServerError %s", 500, payload)
 }
 
 func (o *GetUserProgressInternalServerError) GetPayload() *models.Error {

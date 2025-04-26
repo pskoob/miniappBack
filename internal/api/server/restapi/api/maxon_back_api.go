@@ -310,11 +310,11 @@ func (o *MaxonBackAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/get_user_progress/{tg_id}"] = NewGetUserProgress(o.context, o.GetUserProgressHandler)
+	o.handlers["GET"]["/get_user/{tg_id}"] = NewGetUserProgress(o.context, o.GetUserProgressHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["POST"]["/save_progress"] = NewSaveProgress(o.context, o.SaveProgressHandler)
+	o.handlers["POST"]["/save_progress/{tg_id}"] = NewSaveProgress(o.context, o.SaveProgressHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}

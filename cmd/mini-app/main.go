@@ -109,6 +109,7 @@ func main() {
 
 		cfg.SecretKey,
 		cfg.SendingAccount,
+		cfg.TokenSecretKey,
 	)
 
 	chain := alice.New(appHandler.WsMiddleware).Then(appHandler)

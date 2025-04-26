@@ -30,7 +30,7 @@ func NewSaveProgress(ctx *middleware.Context, handler SaveProgressHandler) *Save
 }
 
 /*
-	SaveProgress swagger:route POST /save_progress Progress saveProgress
+	SaveProgress swagger:route POST /save_progress/{tg_id} Progress saveProgress
 
 Save Progress
 */

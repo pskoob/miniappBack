@@ -31,7 +31,7 @@ func init() {
     "version": "development"
   },
   "paths": {
-    "/get_user_progress/{tg_id}": {
+    "/get_user/{tg_id}": {
       "get": {
         "tags": [
           "Progress"
@@ -133,7 +133,7 @@ func init() {
         }
       }
     },
-    "/save_progress": {
+    "/save_progress/{tg_id}": {
       "post": {
         "tags": [
           "Progress"
@@ -142,12 +142,19 @@ func init() {
         "operationId": "SaveProgress",
         "parameters": [
           {
-            "description": "Save progress body",
-            "name": "Progress",
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Tap Token Body",
+            "name": "TapTokenBody",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Progress"
+              "$ref": "#/definitions/TapTokenBody"
             }
           }
         ],
@@ -518,30 +525,14 @@ func init() {
         }
       }
     },
-    "Progress": {
+    "TapTokenBody": {
       "type": "object",
       "required": [
-        "tg_id",
-        "click_count",
-        "upgrade_level",
-        "upgrade_energy",
-        "has_auto_clicker"
+        "tap_token"
       ],
       "properties": {
-        "click_count": {
-          "type": "integer"
-        },
-        "has_auto_clicker": {
-          "type": "boolean"
-        },
-        "tg_id": {
-          "type": "integer"
-        },
-        "upgrade_energy": {
-          "type": "integer"
-        },
-        "upgrade_level": {
-          "type": "integer"
+        "tap_token": {
+          "type": "string"
         }
       }
     },
@@ -549,26 +540,25 @@ func init() {
       "type": "object",
       "required": [
         "tg_id",
-        "click_count",
-        "upgrade_level",
-        "upgrade_energy",
-        "has_auto_clicker"
+        "balance",
+        "wallet",
+        "username"
       ],
       "properties": {
-        "click_count": {
+        "balance": {
           "type": "integer"
-        },
-        "has_auto_clicker": {
-          "type": "boolean"
         },
         "tg_id": {
           "type": "integer"
         },
-        "upgrade_energy": {
-          "type": "integer"
-        },
         "upgrade_level": {
           "type": "integer"
+        },
+        "username": {
+          "type": "string"
+        },
+        "wallet": {
+          "type": "string"
         }
       }
     }
@@ -595,7 +585,7 @@ func init() {
     "version": "development"
   },
   "paths": {
-    "/get_user_progress/{tg_id}": {
+    "/get_user/{tg_id}": {
       "get": {
         "tags": [
           "Progress"
@@ -697,7 +687,7 @@ func init() {
         }
       }
     },
-    "/save_progress": {
+    "/save_progress/{tg_id}": {
       "post": {
         "tags": [
           "Progress"
@@ -706,12 +696,19 @@ func init() {
         "operationId": "SaveProgress",
         "parameters": [
           {
-            "description": "Save progress body",
-            "name": "Progress",
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Tap Token Body",
+            "name": "TapTokenBody",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Progress"
+              "$ref": "#/definitions/TapTokenBody"
             }
           }
         ],
@@ -1082,30 +1079,14 @@ func init() {
         }
       }
     },
-    "Progress": {
+    "TapTokenBody": {
       "type": "object",
       "required": [
-        "tg_id",
-        "click_count",
-        "upgrade_level",
-        "upgrade_energy",
-        "has_auto_clicker"
+        "tap_token"
       ],
       "properties": {
-        "click_count": {
-          "type": "integer"
-        },
-        "has_auto_clicker": {
-          "type": "boolean"
-        },
-        "tg_id": {
-          "type": "integer"
-        },
-        "upgrade_energy": {
-          "type": "integer"
-        },
-        "upgrade_level": {
-          "type": "integer"
+        "tap_token": {
+          "type": "string"
         }
       }
     },
@@ -1113,26 +1094,25 @@ func init() {
       "type": "object",
       "required": [
         "tg_id",
-        "click_count",
-        "upgrade_level",
-        "upgrade_energy",
-        "has_auto_clicker"
+        "balance",
+        "wallet",
+        "username"
       ],
       "properties": {
-        "click_count": {
+        "balance": {
           "type": "integer"
-        },
-        "has_auto_clicker": {
-          "type": "boolean"
         },
         "tg_id": {
           "type": "integer"
         },
-        "upgrade_energy": {
-          "type": "integer"
-        },
         "upgrade_level": {
           "type": "integer"
+        },
+        "username": {
+          "type": "string"
+        },
+        "wallet": {
+          "type": "string"
         }
       }
     }

@@ -9,11 +9,18 @@ import (
 	"errors"
 	"net/url"
 	golangswaggerpaths "path"
+	"strings"
+
+	"github.com/go-openapi/swag"
 )
 
 // SaveProgressURL generates an URL for the save progress operation
 type SaveProgressURL struct {
+	TgID int64
+
 	_basePath string
+	// avoid unkeyed usage
+	_ struct{}
 }
 
 // WithBasePath sets the base path for this url builder, only required when it's different from the
@@ -35,7 +42,14 @@ func (o *SaveProgressURL) SetBasePath(bp string) {
 func (o *SaveProgressURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/save_progress"
+	var _path = "/save_progress/{tg_id}"
+
+	tgID := swag.FormatInt64(o.TgID)
+	if tgID != "" {
+		_path = strings.Replace(_path, "{tg_id}", tgID, -1)
+	} else {
+		return nil, errors.New("tgId is required on SaveProgressURL")
+	}
 
 	_basePath := o._basePath
 	_result.Path = golangswaggerpaths.Join(_basePath, _path)

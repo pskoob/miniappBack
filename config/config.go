@@ -8,4 +8,5 @@ type Config struct {
 	ApiKey         string `envconfig:"API_KEY"`
 	SecretKey      string `envconfig:"SECRET_KEY"`
 	SendingAccount string `envconfig:"SENDING_ACCOUNT"`
+	TokenSecretKey string `envconfig:"TOKEN_SECRET_KEY"`
 }

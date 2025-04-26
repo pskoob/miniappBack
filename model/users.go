@@ -12,6 +12,8 @@ var (
 	BalanceTooLow             = "user balance too low"
 	UserAlreadyHasAutoClicker = "user already has auto clicker"
 
+	CardHasMaxLvl = "card has max lvl"
+
 	StartedAutoClicker = "auto clicker was started"
 	StoppedAutoClicker = "auto clicker was stopped"
 	HasNotAutoClicker  = "user has not auto clicker"
