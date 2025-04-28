@@ -2,7 +2,11 @@ package bot
 
 import (
 	"context"
+	"crypto/sha256"
 	"database/sql"
+	"encoding/hex"
+	"fmt"
+	"strconv"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/pskoob/miniappBack/model"
@@ -14,9 +18,10 @@ type Bot struct {
 	userUsecase     model.IUserUsecase
 	usercardUsecase model.IUserCardUsecase
 	cardUsecase     model.ICardUsecase
+	hashSalt        string
 }
 
-func New(userUsecase model.IUserUsecase, usercardUsecase model.IUserCardUsecase, cardUsecase model.ICardUsecase, apiKey string) (*Bot, error) {
+func New(userUsecase model.IUserUsecase, usercardUsecase model.IUserCardUsecase, cardUsecase model.ICardUsecase, hashSalt string, apiKey string) (*Bot, error) {
 	bot, err := tgbotapi.NewBotAPI(apiKey)
 	if err != nil {
 		zap.L().Error("error init tg bot", zap.Error(err))
@@ -28,6 +33,7 @@ func New(userUsecase model.IUserUsecase, usercardUsecase model.IUserCardUsecase,
 		userUsecase:     userUsecase,
 		usercardUsecase: usercardUsecase,
 		cardUsecase:     cardUsecase,
+		hashSalt:        hashSalt,
 	}, err
 }
 
@@ -55,9 +61,12 @@ func (b *Bot) ProcessMessage(update tgbotapi.Update) error {
 		username := update.Message.From.UserName
 		_, err := b.userUsecase.GetUserByTgID(ctx, tgID)
 		if err != nil {
+			referralLink := b.generateReferralCode(tgID)
+			fmt.Println("referralLink: ", referralLink)
 			user := model.User{
-				TgID:     sql.NullInt64{Int64: tgID, Valid: true},
-				Username: sql.NullString{String: username, Valid: true},
+				TgID:         sql.NullInt64{Int64: tgID, Valid: true},
+				Username:     sql.NullString{String: username, Valid: true},
+				ReferralLink: referralLink,
 			}
 			userID, err := b.userUsecase.CreateUser(ctx, user)
 			if err != nil {
@@ -133,4 +142,11 @@ func (b *Bot) ProcessMessage(update tgbotapi.Update) error {
 	}
 
 	return nil
+}
+
+func (b *Bot) generateReferralCode(tgID int64) string {
+	data := b.hashSalt + strconv.Itoa(int(tgID))
+	hash := sha256.Sum256([]byte(data))
+	code := hex.EncodeToString(hash[:])
+	return code[:10]
 }

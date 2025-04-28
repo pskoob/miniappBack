@@ -86,13 +86,12 @@ func (h *Handler) StopAutoClickerHandler(req api.StopAutoClickerParams) middlewa
 }
 
 func (h *Handler) startAutoClickerForUser(ctx context.Context, user model.User) {
-	duration := 30 * time.Minute                    // Время работы автокликера
-	actionTicker := time.NewTicker(1 * time.Second) // Тикер для выполнения действий каждую секунду
-	saveTicker := time.NewTicker(5 * time.Second)   // Тикер для сохранения данных каждые n секунд (например, 5 секунд)
-	defer actionTicker.Stop()                       // Остановка тикера действий
-	defer saveTicker.Stop()                         // Остановка тикера сохранения
+	actionTicker := time.NewTicker(h.AutoClickerTickTime)    // Тикер для выполнения действий каждую секунду
+	saveTicker := time.NewTicker(h.AutoClickerSaveTicksTime) // Тикер для сохранения данных каждые n секунд (например, 5 секунд)
+	defer actionTicker.Stop()                                // Остановка тикера действий
+	defer saveTicker.Stop()                                  // Остановка тикера сохранения
 
-	endTime := time.Now().Add(duration) // Время окончания работы автокликера
+	endTime := time.Now().Add(h.AutoClickerWorkTime) // Время окончания работы автокликера
 	balance := user.Balance
 
 	userCards, err := h.userCardUsecase.GetUserCardsByUserID(ctx, user.ID)
@@ -113,8 +112,8 @@ func (h *Handler) startAutoClickerForUser(ctx context.Context, user model.User) 
 				}
 			}
 
-			oneTap := powerClick.CurrentLevel + 1
-			balance += 1
+			oneTap := powerClick.CurrentLevel
+			balance += oneTap
 			zap.L().Info("Auto clicker tapped for user", zap.Int64("tgID", user.TgID.Int64), zap.Int64("oneTap", oneTap))
 			zap.L().Info("user balance: ", zap.Int64("", balance))
 
@@ -125,8 +124,11 @@ func (h *Handler) startAutoClickerForUser(ctx context.Context, user model.User) 
 			err := h.userUsecase.UpdateUserBalance(saveCtx, user.TgID.Int64, balance)
 			if err != nil {
 				zap.L().Error("error save user data", zap.Error(err))
-			} else {
-				zap.L().Info("User  data saved successfully for tgID", zap.Int64("tgID", user.TgID.Int64))
+			}
+
+			err = h.userUsecase.UpdateTotalCoinEarnedByTgID(saveCtx, balance, user.TgID.Int64)
+			if err != nil {
+				zap.L().Error("error save user total balance", zap.Error(err))
 			}
 
 		case <-ctx.Done(): // Если контекст отменен, выходим из цикла
@@ -138,6 +140,12 @@ func (h *Handler) startAutoClickerForUser(ctx context.Context, user model.User) 
 			if err != nil {
 				zap.L().Error("error save user data", zap.Error(err))
 			}
+
+			err = h.userUsecase.UpdateTotalCoinEarnedByTgID(saveCtx, balance, user.TgID.Int64)
+			if err != nil {
+				zap.L().Error("error save user total balance", zap.Error(err))
+			}
+
 			zap.L().Info("Auto clicker stopped for user", zap.Int64("tgID", user.TgID.Int64))
 			return
 		}
@@ -151,6 +159,11 @@ func (h *Handler) startAutoClickerForUser(ctx context.Context, user model.User) 
 			err := h.userUsecase.UpdateUserBalance(saveCtx, user.TgID.Int64, balance)
 			if err != nil {
 				zap.L().Error("error save user data", zap.Error(err))
+			}
+
+			err = h.userUsecase.UpdateTotalCoinEarnedByTgID(saveCtx, balance, user.TgID.Int64)
+			if err != nil {
+				zap.L().Error("error save user total balance", zap.Error(err))
 			}
 
 			zap.L().Info("Auto clicker finished for user", zap.Int64("tgID", user.TgID.Int64))

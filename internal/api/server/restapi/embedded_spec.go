@@ -31,10 +31,228 @@ func init() {
     "version": "development"
   },
   "paths": {
+    "/bind_user_wallet/{tg_id}": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Bind User Wallet",
+        "operationId": "BindUserWallet",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Wallet body",
+            "name": "WalletBody",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WalletBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bind Wallet Response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/collect_referral_earn/{tg_id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Collect Referral Earn",
+        "operationId": "CollectReferralEarn",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Referral Balance Response",
+            "schema": {
+              "$ref": "#/definitions/ReferralBalance"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/create_referral_user/{tg_id}": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Create Referral User",
+        "operationId": "CreateReferralUser",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Referral Link Body",
+            "name": "ReferralLink",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ReferralLink"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Referral Link Response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/get_referral_link/{tg_id}": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get Referral Link",
+        "operationId": "GetReferralLink",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Referral Link Response",
+            "schema": {
+              "$ref": "#/definitions/ReferralLink"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/get_user/{tg_id}": {
       "get": {
         "tags": [
-          "Progress"
+          "User"
         ],
         "summary": "Get User Progress",
         "operationId": "GetUserProgress",
@@ -52,6 +270,56 @@ func init() {
             "description": "Get User Progress Response",
             "schema": {
               "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/get_user_cards/{tg_id}": {
+      "post": {
+        "tags": [
+          "Cards"
+        ],
+        "summary": "Get User Cards",
+        "operationId": "GetUserCards",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get User Cards Response",
+            "schema": {
+              "$ref": "#/definitions/CardsBody"
             }
           },
           "400": {
@@ -136,7 +404,7 @@ func init() {
     "/save_progress/{tg_id}": {
       "post": {
         "tags": [
-          "Progress"
+          "User"
         ],
         "summary": "Save Progress",
         "operationId": "SaveProgress",
@@ -256,6 +524,15 @@ func init() {
             "name": "tg_id",
             "in": "path",
             "required": true
+          },
+          {
+            "description": "Start Energy Collect Body",
+            "name": "StartEnergyCollectBody",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StartEnergyCollectBody"
+            }
           }
         ],
         "responses": {
@@ -492,6 +769,20 @@ func init() {
         }
       }
     },
+    "CardsBody": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "user_cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CardBody"
+          }
+        }
+      }
+    },
     "Error": {
       "type": "object",
       "required": [
@@ -525,6 +816,39 @@ func init() {
         }
       }
     },
+    "ReferralBalance": {
+      "type": "object",
+      "required": [
+        "referral_balance"
+      ],
+      "properties": {
+        "referral_balance": {
+          "type": "integer"
+        }
+      }
+    },
+    "ReferralLink": {
+      "type": "object",
+      "required": [
+        "referral_link"
+      ],
+      "properties": {
+        "referral_link": {
+          "type": "string"
+        }
+      }
+    },
+    "StartEnergyCollectBody": {
+      "type": "object",
+      "required": [
+        "current_energy_token"
+      ],
+      "properties": {
+        "current_energy_token": {
+          "type": "string"
+        }
+      }
+    },
     "TapTokenBody": {
       "type": "object",
       "required": [
@@ -542,10 +866,17 @@ func init() {
         "tg_id",
         "balance",
         "wallet",
-        "username"
+        "username",
+        "energy"
       ],
       "properties": {
         "balance": {
+          "type": "integer"
+        },
+        "energy": {
+          "type": "integer"
+        },
+        "referral_balance": {
           "type": "integer"
         },
         "tg_id": {
@@ -557,6 +888,17 @@ func init() {
         "username": {
           "type": "string"
         },
+        "wallet": {
+          "type": "string"
+        }
+      }
+    },
+    "WalletBody": {
+      "type": "object",
+      "required": [
+        "wallet"
+      ],
+      "properties": {
         "wallet": {
           "type": "string"
         }
@@ -585,10 +927,228 @@ func init() {
     "version": "development"
   },
   "paths": {
+    "/bind_user_wallet/{tg_id}": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Bind User Wallet",
+        "operationId": "BindUserWallet",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Wallet body",
+            "name": "WalletBody",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WalletBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bind Wallet Response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/collect_referral_earn/{tg_id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Collect Referral Earn",
+        "operationId": "CollectReferralEarn",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Referral Balance Response",
+            "schema": {
+              "$ref": "#/definitions/ReferralBalance"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/create_referral_user/{tg_id}": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Create Referral User",
+        "operationId": "CreateReferralUser",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Referral Link Body",
+            "name": "ReferralLink",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ReferralLink"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Referral Link Response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/get_referral_link/{tg_id}": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get Referral Link",
+        "operationId": "GetReferralLink",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Referral Link Response",
+            "schema": {
+              "$ref": "#/definitions/ReferralLink"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/get_user/{tg_id}": {
       "get": {
         "tags": [
-          "Progress"
+          "User"
         ],
         "summary": "Get User Progress",
         "operationId": "GetUserProgress",
@@ -606,6 +1166,56 @@ func init() {
             "description": "Get User Progress Response",
             "schema": {
               "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/get_user_cards/{tg_id}": {
+      "post": {
+        "tags": [
+          "Cards"
+        ],
+        "summary": "Get User Cards",
+        "operationId": "GetUserCards",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The tg ID of user",
+            "name": "tg_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get User Cards Response",
+            "schema": {
+              "$ref": "#/definitions/CardsBody"
             }
           },
           "400": {
@@ -690,7 +1300,7 @@ func init() {
     "/save_progress/{tg_id}": {
       "post": {
         "tags": [
-          "Progress"
+          "User"
         ],
         "summary": "Save Progress",
         "operationId": "SaveProgress",
@@ -810,6 +1420,15 @@ func init() {
             "name": "tg_id",
             "in": "path",
             "required": true
+          },
+          {
+            "description": "Start Energy Collect Body",
+            "name": "StartEnergyCollectBody",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StartEnergyCollectBody"
+            }
           }
         ],
         "responses": {
@@ -1046,6 +1665,20 @@ func init() {
         }
       }
     },
+    "CardsBody": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "user_cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CardBody"
+          }
+        }
+      }
+    },
     "Error": {
       "type": "object",
       "required": [
@@ -1079,6 +1712,39 @@ func init() {
         }
       }
     },
+    "ReferralBalance": {
+      "type": "object",
+      "required": [
+        "referral_balance"
+      ],
+      "properties": {
+        "referral_balance": {
+          "type": "integer"
+        }
+      }
+    },
+    "ReferralLink": {
+      "type": "object",
+      "required": [
+        "referral_link"
+      ],
+      "properties": {
+        "referral_link": {
+          "type": "string"
+        }
+      }
+    },
+    "StartEnergyCollectBody": {
+      "type": "object",
+      "required": [
+        "current_energy_token"
+      ],
+      "properties": {
+        "current_energy_token": {
+          "type": "string"
+        }
+      }
+    },
     "TapTokenBody": {
       "type": "object",
       "required": [
@@ -1096,10 +1762,17 @@ func init() {
         "tg_id",
         "balance",
         "wallet",
-        "username"
+        "username",
+        "energy"
       ],
       "properties": {
         "balance": {
+          "type": "integer"
+        },
+        "energy": {
+          "type": "integer"
+        },
+        "referral_balance": {
           "type": "integer"
         },
         "tg_id": {
@@ -1111,6 +1784,17 @@ func init() {
         "username": {
           "type": "string"
         },
+        "wallet": {
+          "type": "string"
+        }
+      }
+    },
+    "WalletBody": {
+      "type": "object",
+      "required": [
+        "wallet"
+      ],
+      "properties": {
         "wallet": {
           "type": "string"
         }

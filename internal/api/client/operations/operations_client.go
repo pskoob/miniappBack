@@ -56,6 +56,16 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	BindUserWallet(params *BindUserWalletParams, opts ...ClientOption) (*BindUserWalletOK, error)
+
+	CollectReferralEarn(params *CollectReferralEarnParams, opts ...ClientOption) (*CollectReferralEarnOK, error)
+
+	CreateReferralUser(params *CreateReferralUserParams, opts ...ClientOption) (*CreateReferralUserOK, error)
+
+	GetReferralLink(params *GetReferralLinkParams, opts ...ClientOption) (*GetReferralLinkOK, error)
+
+	GetUserCards(params *GetUserCardsParams, opts ...ClientOption) (*GetUserCardsOK, error)
+
 	GetUserProgress(params *GetUserProgressParams, opts ...ClientOption) (*GetUserProgressOK, error)
 
 	SaveProgress(params *SaveProgressParams, opts ...ClientOption) (*SaveProgressOK, error)
@@ -73,6 +83,196 @@ type ClientService interface {
 	UpdateUserCard(params *UpdateUserCardParams, opts ...ClientOption) (*UpdateUserCardOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+BindUserWallet binds user wallet
+*/
+func (a *Client) BindUserWallet(params *BindUserWalletParams, opts ...ClientOption) (*BindUserWalletOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewBindUserWalletParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "BindUserWallet",
+		Method:             "POST",
+		PathPattern:        "/bind_user_wallet/{tg_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &BindUserWalletReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*BindUserWalletOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for BindUserWallet: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+CollectReferralEarn collects referral earn
+*/
+func (a *Client) CollectReferralEarn(params *CollectReferralEarnParams, opts ...ClientOption) (*CollectReferralEarnOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCollectReferralEarnParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CollectReferralEarn",
+		Method:             "GET",
+		PathPattern:        "/collect_referral_earn/{tg_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CollectReferralEarnReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CollectReferralEarnOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CollectReferralEarn: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+CreateReferralUser creates referral user
+*/
+func (a *Client) CreateReferralUser(params *CreateReferralUserParams, opts ...ClientOption) (*CreateReferralUserOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateReferralUserParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateReferralUser",
+		Method:             "POST",
+		PathPattern:        "/create_referral_user/{tg_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &CreateReferralUserReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateReferralUserOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreateReferralUser: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetReferralLink gets referral link
+*/
+func (a *Client) GetReferralLink(params *GetReferralLinkParams, opts ...ClientOption) (*GetReferralLinkOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetReferralLinkParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetReferralLink",
+		Method:             "POST",
+		PathPattern:        "/get_referral_link/{tg_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &GetReferralLinkReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetReferralLinkOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetReferralLink: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+GetUserCards gets user cards
+*/
+func (a *Client) GetUserCards(params *GetUserCardsParams, opts ...ClientOption) (*GetUserCardsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetUserCardsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetUserCards",
+		Method:             "POST",
+		PathPattern:        "/get_user_cards/{tg_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &GetUserCardsReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetUserCardsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetUserCards: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
 }
 
 /*

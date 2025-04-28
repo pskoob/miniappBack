@@ -23,6 +23,13 @@ type User struct {
 	// Required: true
 	Balance *int64 `json:"balance"`
 
+	// energy
+	// Required: true
+	Energy *int64 `json:"energy"`
+
+	// referral balance
+	ReferralBalance int64 `json:"referral_balance,omitempty"`
+
 	// tg id
 	// Required: true
 	TgID *int64 `json:"tg_id"`
@@ -47,6 +54,10 @@ func (m *User) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateEnergy(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateTgID(formats); err != nil {
 		res = append(res, err)
 	}
@@ -68,6 +79,15 @@ func (m *User) Validate(formats strfmt.Registry) error {
 func (m *User) validateBalance(formats strfmt.Registry) error {
 
 	if err := validate.Required("balance", "body", m.Balance); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *User) validateEnergy(formats strfmt.Registry) error {
+
+	if err := validate.Required("energy", "body", m.Energy); err != nil {
 		return err
 	}
 

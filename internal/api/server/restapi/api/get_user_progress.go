@@ -30,7 +30,7 @@ func NewGetUserProgress(ctx *middleware.Context, handler GetUserProgressHandler)
 }
 
 /*
-	GetUserProgress swagger:route GET /get_user/{tg_id} Progress getUserProgress
+	GetUserProgress swagger:route GET /get_user/{tg_id} User getUserProgress
 
 Get User Progress
 */

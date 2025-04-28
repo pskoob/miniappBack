@@ -2,13 +2,18 @@ BEGIN;
 
 CREATE TABLE IF NOT EXISTS users
 (
-    id                       BIGSERIAL PRIMARY KEY,
-    tg_id                    BIGINT UNIQUE,
-    username                 VARCHAR(255) UNIQUE,
-    wallet                   VARCHAR(255) UNIQUE,
-    balance                  BIGINT default 0,
-    updated_at               TIMESTAMP WITHOUT TIME ZONE,
-    created_at               TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT(now() at TIME zone 'utc')
+    id                          BIGSERIAL PRIMARY KEY,
+    tg_id                       BIGINT UNIQUE,
+    username                    VARCHAR(255) UNIQUE,
+    wallet                      VARCHAR(255) UNIQUE,
+    balance                     BIGINT default 0,
+    energy                      BIGINT DEFAULT 0,
+    referral_user_id            BIGINT,
+    referral_link               VARCHAR(255) NOT NULL UNIQUE,
+    total_coin_earned           BIGINT DEFAULT 0,
+    total_coin_referral_spent   BIGINT DEFAULT 0,
+    updated_at                  TIMESTAMP WITHOUT TIME ZONE,
+    created_at                  TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT(now() at TIME zone 'utc')
 );
 
 
@@ -24,13 +29,13 @@ CREATE TABLE IF NOT EXISTS cards
 
 CREATE TABLE IF NOT EXISTS users_cards 
 (
-    user_id        BIGINT REFERENCES users(id) ON DELETE CASCADE,
-    card_id        BIGINT REFERENCES cards(id) ON DELETE CASCADE,
-    card_name      VARCHAR(100) NOT NULL,
-    current_level  BIGINT DEFAULT 0,
-    auto_clicker   BOOLEAN DEFAULT FALSE,
-    updated_at     TIMESTAMP WITHOUT TIME ZONE,
-    created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (now() AT TIME ZONE 'utc'),
+    user_id         BIGINT REFERENCES users(id) ON DELETE CASCADE,
+    card_id         BIGINT REFERENCES cards(id) ON DELETE CASCADE,
+    card_name       VARCHAR(100) NOT NULL,
+    current_level   BIGINT DEFAULT 1,
+    auto_clicker    BOOLEAN DEFAULT FALSE,
+    updated_at      TIMESTAMP WITHOUT TIME ZONE,
+    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (now() AT TIME ZONE 'utc'),
     PRIMARY KEY (user_id, card_id)
 );
 

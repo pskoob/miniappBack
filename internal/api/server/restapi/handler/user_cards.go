@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"fmt"
 	"math"
 	"time"
@@ -73,7 +74,6 @@ func (h *Handler) UpdateUserCardHandler(req api.UpdateUserCardParams) middleware
 			fmt.Println("int: ", int64(updatePrice), "float: ", updatePrice)
 
 			newUserBalance := user.Balance - int64(updatePrice)
-			fmt.Println("new: ", newUserBalance, "old: ", user.Balance)
 
 			err = h.userUsecase.UpdateUserBalance(ctx, user.TgID.Int64, newUserBalance)
 			if err != nil {
@@ -119,4 +119,49 @@ func (h *Handler) UpdateUserCardHandler(req api.UpdateUserCardParams) middleware
 
 	return api.NewUpdateUserCardOK().WithPayload(cardResult)
 
+}
+
+func (h *Handler) GetUserCardsHandler(req api.GetUserCardsParams) middleware.Responder {
+	zap.L().Info("get user cards request")
+
+	ctx := req.HTTPRequest.Context()
+
+	user, err := h.userUsecase.GetUserByTgID(ctx, req.TgID)
+	if err != nil {
+		zap.L().Error(fmt.Sprintf("no such user tg id: %d", req.TgID), zap.Error(err))
+		return api.NewGetUserCardsBadRequest()
+	}
+
+	userCards, err := h.userCardUsecase.GetUserCardsByUserID(ctx, user.ID)
+	if err != nil {
+		zap.L().Error(fmt.Sprintf("error get user cards, user tg id: %d", req.TgID), zap.Error(err))
+		return api.NewGetUserCardsInternalServerError()
+	}
+
+	userCardsResult := h.UserCardsToDefinition(ctx, userCards)
+	return api.NewGetUserCardsOK().WithPayload(&definition.CardsBody{
+		Count:     int64(len(userCardsResult)),
+		UserCards: userCardsResult,
+	})
+}
+
+func (h *Handler) UserCardsToDefinition(ctx context.Context, userCards []model.UserCard) []*definition.CardBody {
+	userCardsresult := make([]*definition.CardBody, len(userCards))
+
+	for i := range userCards {
+		userCardsresult[i] = &definition.CardBody{
+			UserID:       userCards[i].UserID,
+			CardID:       userCards[i].CardID,
+			CardName:     userCards[i].CardName,
+			CurrentLevel: userCards[i].CurrentLevel,
+			AutoClicker:  userCards[i].AutoClicker.Bool,
+			CreatedAt:    userCards[i].CreatedAt.Unix(),
+		}
+
+		if userCards[i].UpdatedAt.Valid {
+			userCardsresult[i].UpdatedAt = userCards[i].UpdatedAt.Time.Unix()
+		}
+	}
+
+	return userCardsresult
 }

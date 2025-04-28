@@ -19,12 +19,14 @@ produces:
 
 paths:
 
+
+### USER
   /save_progress/{tg_id}:
     post:
       summary: Save Progress
       operationId: SaveProgress
       tags: 
-        - Progress
+        - User
       parameters:
         - name: tg_id
           in: path
@@ -64,7 +66,7 @@ paths:
       summary: Get User Progress
       operationId: GetUserProgress
       tags: 
-        - Progress
+        - User
       parameters:
         - name: tg_id
           in: path
@@ -93,6 +95,156 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /collect_referral_earn/{tg_id}:
+    get:
+      summary: Collect Referral Earn
+      operationId: CollectReferralEarn
+      tags: 
+        - User
+      parameters:
+        - name: tg_id
+          in: path
+          required: true
+          type: integer
+          description: The tg ID of user
+      responses:
+        200:
+          description: Referral Balance Response
+          schema:
+            $ref: '#/definitions/ReferralBalance'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error' 
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: "#/definitions/Error"        
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /bind_user_wallet/{tg_id}:
+    post:
+      summary: Bind User Wallet
+      operationId: BindUserWallet
+      tags: 
+        - User
+      parameters:
+        - name: tg_id
+          in: path
+          required: true
+          type: integer
+          description: The tg ID of user
+        - name: WalletBody
+          description: Wallet body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/WalletBody'
+      responses:
+        200:
+          description: Bind Wallet Response
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error' 
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: "#/definitions/Error"        
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /get_referral_link/{tg_id}:
+    post:
+      summary: Get Referral Link
+      operationId: GetReferralLink
+      tags: 
+        - User
+      parameters:
+        - name: tg_id
+          in: path
+          required: true
+          type: integer
+          description: The tg ID of user
+      responses:
+        200:
+          description: Referral Link Response
+          schema:
+            $ref: '#/definitions/ReferralLink'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error' 
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: "#/definitions/Error"        
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /create_referral_user/{tg_id}:
+    post:
+      summary: Create Referral User
+      operationId: CreateReferralUser
+      tags: 
+        - User
+      parameters:
+        - name: tg_id
+          in: path
+          required: true
+          type: integer
+          description: The tg ID of user
+        - name: ReferralLink
+          description: Referral Link Body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ReferralLink'
+      responses:
+        200:
+          description: Referral Link Response
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error' 
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: "#/definitions/Error"        
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+
+
+### AUTO CLICKER CTART STOP
   /start_auto_clicker/{tg_id}:
     post:
       summary: Start Auto Clicker
@@ -161,6 +313,8 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+
+#### ENERGRY START STOP
   /start_energy_collect/{tg_id}:
     post:
       summary: Start Energy Offline
@@ -173,6 +327,12 @@ paths:
           required: true
           type: integer
           description: The tg ID of user
+        - name: StartEnergyCollectBody
+          description: Start Energy Collect Body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/StartEnergyCollectBody'
       responses:
         200:
           description: Start Collect Energy Response
@@ -229,6 +389,8 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+
+#### USER CARDS
   /update_user_card/{tg_id}:
     post:
       summary: Update User Card
@@ -269,6 +431,42 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /get_user_cards/{tg_id}:
+    post:
+      summary: Get User Cards
+      operationId: GetUserCards
+      tags: 
+        - Cards
+      parameters:
+        - name: tg_id
+          in: path
+          required: true
+          type: integer
+          description: The tg ID of user
+      responses:
+        200:
+          description: Get User Cards Response
+          schema:
+            $ref: '#/definitions/CardsBody'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error' 
+        422:
+          description: Unprocessable Entity
+          schema:
+            $ref: "#/definitions/Error"        
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+
+
+#### NEAR
   /near_transaction:
     post:
       summary: Transit Near
@@ -322,6 +520,7 @@ definitions:
       - balance
       - wallet
       - username
+      - energy
     properties:
       tg_id:
         type: integer
@@ -333,6 +532,10 @@ definitions:
         type: string
       username:
         type: string
+      energy:
+        type: integer
+      referral_balance:
+        type: integer
 
   NearTransit:
     type: object
@@ -368,6 +571,16 @@ definitions:
       created_at:
         type: integer
 
+  CardsBody:
+    type: object
+    properties:
+      count:
+        type: integer
+      user_cards:
+        type: array
+        items:
+          $ref: "#/definitions/CardBody"
+
   CardUpdateBody:
     type: object
     properties:
@@ -385,3 +598,35 @@ definitions:
     properties:
       tap_token:
         type: string
+
+  StartEnergyCollectBody:
+    type: object
+    required:
+      - current_energy_token
+    properties:
+      current_energy_token:
+        type: string
+
+  WalletBody:
+    type: object
+    required:
+      - wallet
+    properties:
+      wallet:
+        type: string
+
+  ReferralLink:
+    type: object
+    required:
+      - referral_link
+    properties:
+      referral_link:
+        type: string
+
+  ReferralBalance:
+    type: object
+    required:
+      - referral_balance
+    properties:
+      referral_balance:
+        type: integer

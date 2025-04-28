@@ -7,6 +7,7 @@ import (
 	"context"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/pskoob/miniappBack/internal/api/server/restapi"
 	"github.com/pskoob/miniappBack/internal/api/server/restapi/api"
@@ -19,29 +20,57 @@ import (
 )
 
 type Handler struct {
-	userUsecase      model.IUserUsecase
-	autoClickerTasks map[int64]context.CancelFunc
-	cardUsecase      model.ICardUsecase
-	userCardUsecase  model.IUserCardUsecase
-	costCardUsecase  model.ICostCardUsecase
+	userUsecase     model.IUserUsecase
+	cardUsecase     model.ICardUsecase
+	userCardUsecase model.IUserCardUsecase
+	costCardUsecase model.ICostCardUsecase
 
-	secretKey      string
-	sendingAccount string
-	tokenSecretKey string
+	autoClickerTasks   map[int64]context.CancelFunc
+	energyCollectTasks map[int64]context.CancelFunc
+
+	secretKey        string
+	sendingAccount   string
+	tokenSecretKey   string
+	botLink          string
+	hashSalt         string
+	referralUserPart float64
+
+	AutoClickerWorkTime      time.Duration
+	AutoClickerTickTime      time.Duration
+	AutoClickerSaveTicksTime time.Duration
+
+	EnergyBaseCapacity  int64
+	EnergyUpgrade       int64
+	EnergyTickTime      time.Duration
+	EnergySaveTicksTime time.Duration
 
 	router http.Handler
 }
 
 func New(
 	userUsecase model.IUserUsecase,
-	autoClickerTasks map[int64]context.CancelFunc,
 	cardUsecase model.ICardUsecase,
 	userCardUsecase model.IUserCardUsecase,
 	costCardUsecase model.ICostCardUsecase,
 
+	autoClickerTasks map[int64]context.CancelFunc,
+	energyCollectTasks map[int64]context.CancelFunc,
+
 	secretKey string,
 	sendingAccount string,
 	tokenSecretKey string,
+	botLink string,
+	hashSalt string,
+	referralUserPart float64,
+
+	AutoClickerWorkTime time.Duration,
+	AutoClickerTickTime time.Duration,
+	AutoClickerSaveTicksTime time.Duration,
+
+	EnergyBaseCapacity int64,
+	EnergyUpgrade int64,
+	EnergyTickTime time.Duration,
+	EnergySaveTicksTime time.Duration,
 ) *Handler {
 
 	withChangedVersion := strings.ReplaceAll(string(restapi.SwaggerJSON), "development", "1")
@@ -51,15 +80,29 @@ func New(
 	}
 
 	h := &Handler{
-		userUsecase:      userUsecase,
-		autoClickerTasks: autoClickerTasks,
-		cardUsecase:      cardUsecase,
-		userCardUsecase:  userCardUsecase,
-		costCardUsecase:  costCardUsecase,
+		userUsecase:     userUsecase,
+		cardUsecase:     cardUsecase,
+		userCardUsecase: userCardUsecase,
+		costCardUsecase: costCardUsecase,
 
-		secretKey:      secretKey,
-		sendingAccount: sendingAccount,
-		tokenSecretKey: tokenSecretKey,
+		autoClickerTasks:   autoClickerTasks,
+		energyCollectTasks: energyCollectTasks,
+
+		secretKey:        secretKey,
+		sendingAccount:   sendingAccount,
+		tokenSecretKey:   tokenSecretKey,
+		botLink:          botLink,
+		hashSalt:         hashSalt,
+		referralUserPart: referralUserPart,
+
+		AutoClickerWorkTime:      AutoClickerWorkTime,
+		AutoClickerTickTime:      AutoClickerTickTime,
+		AutoClickerSaveTicksTime: AutoClickerSaveTicksTime,
+
+		EnergyBaseCapacity:  EnergyBaseCapacity,
+		EnergyUpgrade:       EnergyUpgrade,
+		EnergyTickTime:      EnergyTickTime,
+		EnergySaveTicksTime: EnergySaveTicksTime,
 	}
 
 	zap.L().Error("server http handler request")
@@ -67,19 +110,28 @@ func New(
 	router.UseSwaggerUI()
 	router.Logger = zap.S().Infof
 
-	// Progress
+	// USER
 	router.GetUserProgressHandler = api.GetUserProgressHandlerFunc(h.GetUserHandler)
 	router.SaveProgressHandler = api.SaveProgressHandlerFunc(h.SaveUserProgressHandler)
+	router.BindUserWalletHandler = api.BindUserWalletHandlerFunc(h.BindUserWalletHandler)
+	router.GetReferralLinkHandler = api.GetReferralLinkHandlerFunc(h.GetReferralLinkHandler)
+	router.CreateReferralUserHandler = api.CreateReferralUserHandlerFunc(h.CreateReferralUserHandler)
+	router.CollectReferralEarnHandler = api.CollectReferralEarnHandlerFunc(h.CollectReferralEarnHandler)
 
-	// Auto clicker
+	// AUTO CLICKER
 	router.StartAutoClickerHandler = api.StartAutoClickerHandlerFunc(h.StartAutoClickerHandler)
 	router.StopAutoClickerHandler = api.StopAutoClickerHandlerFunc(h.StopAutoClickerHandler)
 
-	// Near
+	// NEAR
 	router.TransitNearHandler = api.TransitNearHandlerFunc(h.NearTransactionHandler)
 
-	// Update Cards
+	// USER CARDS
 	router.UpdateUserCardHandler = api.UpdateUserCardHandlerFunc(h.UpdateUserCardHandler)
+	router.GetUserCardsHandler = api.GetUserCardsHandlerFunc(h.GetUserCardsHandler)
+
+	// ENERGY
+	router.StartEnergyOfflineHandler = api.StartEnergyOfflineHandlerFunc(h.StartEnergyCollectHandler)
+	router.StopEnergyOfflineHandler = api.StopEnergyOfflineHandlerFunc(h.StopEnergyCollectHandler)
 
 	h.router = router.Serve(nil)
 

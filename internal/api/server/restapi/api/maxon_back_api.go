@@ -42,6 +42,21 @@ func NewMaxonBackAPI(spec *loads.Document) *MaxonBackAPI {
 
 		JSONProducer: runtime.JSONProducer(),
 
+		BindUserWalletHandler: BindUserWalletHandlerFunc(func(params BindUserWalletParams) middleware.Responder {
+			return middleware.NotImplemented("operation BindUserWallet has not yet been implemented")
+		}),
+		CollectReferralEarnHandler: CollectReferralEarnHandlerFunc(func(params CollectReferralEarnParams) middleware.Responder {
+			return middleware.NotImplemented("operation CollectReferralEarn has not yet been implemented")
+		}),
+		CreateReferralUserHandler: CreateReferralUserHandlerFunc(func(params CreateReferralUserParams) middleware.Responder {
+			return middleware.NotImplemented("operation CreateReferralUser has not yet been implemented")
+		}),
+		GetReferralLinkHandler: GetReferralLinkHandlerFunc(func(params GetReferralLinkParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetReferralLink has not yet been implemented")
+		}),
+		GetUserCardsHandler: GetUserCardsHandlerFunc(func(params GetUserCardsParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetUserCards has not yet been implemented")
+		}),
 		GetUserProgressHandler: GetUserProgressHandlerFunc(func(params GetUserProgressParams) middleware.Responder {
 			return middleware.NotImplemented("operation GetUserProgress has not yet been implemented")
 		}),
@@ -102,6 +117,16 @@ type MaxonBackAPI struct {
 	//   - application/json
 	JSONProducer runtime.Producer
 
+	// BindUserWalletHandler sets the operation handler for the bind user wallet operation
+	BindUserWalletHandler BindUserWalletHandler
+	// CollectReferralEarnHandler sets the operation handler for the collect referral earn operation
+	CollectReferralEarnHandler CollectReferralEarnHandler
+	// CreateReferralUserHandler sets the operation handler for the create referral user operation
+	CreateReferralUserHandler CreateReferralUserHandler
+	// GetReferralLinkHandler sets the operation handler for the get referral link operation
+	GetReferralLinkHandler GetReferralLinkHandler
+	// GetUserCardsHandler sets the operation handler for the get user cards operation
+	GetUserCardsHandler GetUserCardsHandler
 	// GetUserProgressHandler sets the operation handler for the get user progress operation
 	GetUserProgressHandler GetUserProgressHandler
 	// SaveProgressHandler sets the operation handler for the save progress operation
@@ -195,6 +220,21 @@ func (o *MaxonBackAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.BindUserWalletHandler == nil {
+		unregistered = append(unregistered, "BindUserWalletHandler")
+	}
+	if o.CollectReferralEarnHandler == nil {
+		unregistered = append(unregistered, "CollectReferralEarnHandler")
+	}
+	if o.CreateReferralUserHandler == nil {
+		unregistered = append(unregistered, "CreateReferralUserHandler")
+	}
+	if o.GetReferralLinkHandler == nil {
+		unregistered = append(unregistered, "GetReferralLinkHandler")
+	}
+	if o.GetUserCardsHandler == nil {
+		unregistered = append(unregistered, "GetUserCardsHandler")
+	}
 	if o.GetUserProgressHandler == nil {
 		unregistered = append(unregistered, "GetUserProgressHandler")
 	}
@@ -307,6 +347,26 @@ func (o *MaxonBackAPI) initHandlerCache() {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
 
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/bind_user_wallet/{tg_id}"] = NewBindUserWallet(o.context, o.BindUserWalletHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/collect_referral_earn/{tg_id}"] = NewCollectReferralEarn(o.context, o.CollectReferralEarnHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/create_referral_user/{tg_id}"] = NewCreateReferralUser(o.context, o.CreateReferralUserHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/get_referral_link/{tg_id}"] = NewGetReferralLink(o.context, o.GetReferralLinkHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/get_user_cards/{tg_id}"] = NewGetUserCards(o.context, o.GetUserCardsHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

@@ -19,28 +19,28 @@ import (
 	models "github.com/pskoob/miniappBack/internal/api/definition"
 )
 
-// NewStartEnergyOfflineParams creates a new StartEnergyOfflineParams object
+// NewCreateReferralUserParams creates a new CreateReferralUserParams object
 //
 // There are no default values defined in the spec.
-func NewStartEnergyOfflineParams() StartEnergyOfflineParams {
+func NewCreateReferralUserParams() CreateReferralUserParams {
 
-	return StartEnergyOfflineParams{}
+	return CreateReferralUserParams{}
 }
 
-// StartEnergyOfflineParams contains all the bound params for the start energy offline operation
+// CreateReferralUserParams contains all the bound params for the create referral user operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters StartEnergyOffline
-type StartEnergyOfflineParams struct {
+// swagger:parameters CreateReferralUser
+type CreateReferralUserParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
-	/*Start Energy Collect Body
+	/*Referral Link Body
 	  Required: true
 	  In: body
 	*/
-	StartEnergyCollectBody *models.StartEnergyCollectBody
+	ReferralLink *models.ReferralLink
 	/*The tg ID of user
 	  Required: true
 	  In: path
@@ -51,20 +51,20 @@ type StartEnergyOfflineParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewStartEnergyOfflineParams() beforehand.
-func (o *StartEnergyOfflineParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewCreateReferralUserParams() beforehand.
+func (o *CreateReferralUserParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.StartEnergyCollectBody
+		var body models.ReferralLink
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
-				res = append(res, errors.Required("startEnergyCollectBody", "body", ""))
+				res = append(res, errors.Required("referralLink", "body", ""))
 			} else {
-				res = append(res, errors.NewParseError("startEnergyCollectBody", "body", "", err))
+				res = append(res, errors.NewParseError("referralLink", "body", "", err))
 			}
 		} else {
 			// validate body object
@@ -78,11 +78,11 @@ func (o *StartEnergyOfflineParams) BindRequest(r *http.Request, route *middlewar
 			}
 
 			if len(res) == 0 {
-				o.StartEnergyCollectBody = &body
+				o.ReferralLink = &body
 			}
 		}
 	} else {
-		res = append(res, errors.Required("startEnergyCollectBody", "body", ""))
+		res = append(res, errors.Required("referralLink", "body", ""))
 	}
 
 	rTgID, rhkTgID, _ := route.Params.GetOK("tg_id")
@@ -96,7 +96,7 @@ func (o *StartEnergyOfflineParams) BindRequest(r *http.Request, route *middlewar
 }
 
 // bindTgID binds and validates parameter TgID from path.
-func (o *StartEnergyOfflineParams) bindTgID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *CreateReferralUserParams) bindTgID(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]

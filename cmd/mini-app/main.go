@@ -92,24 +92,38 @@ func main() {
 	costCardRepo := _costCardRepo.New(sqalxConn)
 	costCUsecase := _costCardUsecase.New(costCardRepo)
 
-	bot, err := _bot.New(userUsecase, userCardUsecase, cardUsecase, cfg.ApiKey)
+	bot, err := _bot.New(userUsecase, userCardUsecase, cardUsecase, cfg.HashSalt, cfg.ApiKey)
 	if err != nil {
 		zap.L().Error("error init tg bot", zap.Error(err))
 	}
 	go bot.ListenUpdates()
 
 	autoClickerTasks := make(map[int64]context.CancelFunc)
+	energyCollectTasks := make(map[int64]context.CancelFunc)
 
 	appHandler := handler.New(
 		userUsecase,
-		autoClickerTasks,
 		cardUsecase,
 		userCardUsecase,
 		costCUsecase,
 
+		autoClickerTasks,
+		energyCollectTasks,
+
 		cfg.SecretKey,
 		cfg.SendingAccount,
 		cfg.TokenSecretKey,
+		cfg.BotLink,
+		cfg.HashSalt,
+		cfg.ReferralUserPart,
+
+		cfg.AutoClickerWorkTime,
+		cfg.AutoClickerTickTime,
+		cfg.AutoClickerSaveTicksTime,
+		cfg.EnergyBaseCapacity,
+		cfg.EnergyUpgrade,
+		cfg.EnergyTickTime,
+		cfg.EnergySaveTicksTime,
 	)
 
 	chain := alice.New(appHandler.WsMiddleware).Then(appHandler)

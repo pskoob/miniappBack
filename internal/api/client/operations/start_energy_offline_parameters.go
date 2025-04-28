@@ -15,6 +15,8 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+
+	models "github.com/pskoob/miniappBack/internal/api/definition"
 )
 
 // NewStartEnergyOfflineParams creates a new StartEnergyOfflineParams object,
@@ -61,6 +63,12 @@ StartEnergyOfflineParams contains all the parameters to send to the API endpoint
 	Typically these are written to a http.Request.
 */
 type StartEnergyOfflineParams struct {
+
+	/* StartEnergyCollectBody.
+
+	   Start Energy Collect Body
+	*/
+	StartEnergyCollectBody *models.StartEnergyCollectBody
 
 	/* TgID.
 
@@ -121,6 +129,17 @@ func (o *StartEnergyOfflineParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithStartEnergyCollectBody adds the startEnergyCollectBody to the start energy offline params
+func (o *StartEnergyOfflineParams) WithStartEnergyCollectBody(startEnergyCollectBody *models.StartEnergyCollectBody) *StartEnergyOfflineParams {
+	o.SetStartEnergyCollectBody(startEnergyCollectBody)
+	return o
+}
+
+// SetStartEnergyCollectBody adds the startEnergyCollectBody to the start energy offline params
+func (o *StartEnergyOfflineParams) SetStartEnergyCollectBody(startEnergyCollectBody *models.StartEnergyCollectBody) {
+	o.StartEnergyCollectBody = startEnergyCollectBody
+}
+
 // WithTgID adds the tgID to the start energy offline params
 func (o *StartEnergyOfflineParams) WithTgID(tgID int64) *StartEnergyOfflineParams {
 	o.SetTgID(tgID)
@@ -139,6 +158,11 @@ func (o *StartEnergyOfflineParams) WriteToRequest(r runtime.ClientRequest, reg s
 		return err
 	}
 	var res []error
+	if o.StartEnergyCollectBody != nil {
+		if err := r.SetBodyParam(o.StartEnergyCollectBody); err != nil {
+			return err
+		}
+	}
 
 	// path param tg_id
 	if err := r.SetPathParam("tg_id", swag.FormatInt64(o.TgID)); err != nil {
